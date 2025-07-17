@@ -5,11 +5,13 @@ import Spotify from "./Spotify";
 import { Suspense } from "react";
 import { FaLocationArrow } from "react-icons/fa6";
 import Github from "./Github";
+import Websites from "./Websites";
+import Loading from "./Loading";
 
 
 export default function LeftPanel() {
   return (
-    <div className="hidden sm:flex flex-col items-start justify-start h-full gap-y-5 p-4">
+    <div className="hidden sm:flex flex-col items-start justify-start gap-y-5 p-4">
       <img
         src="https://avatars.githubusercontent.com/u/96346957?v=4"
         alt="me"
@@ -59,6 +61,9 @@ export default function LeftPanel() {
         </div>
       }>
         <Spotify />
+      </Suspense>
+      <Suspense fallback={<Loading />}>
+        <Websites />
       </Suspense>
 
     </div>

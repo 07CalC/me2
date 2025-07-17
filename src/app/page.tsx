@@ -3,7 +3,7 @@ import RightPanel from "@/components/RightPanel";
 
 export default function HomePage() {
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex pb-10 w-full h-screen">
       {/* Left Panel */}
       <div className="hidden sm:flex w-1/3 overflow-y-auto justify-end">
         <div className="w-full flex justify-end h-max px-4 py-6">
