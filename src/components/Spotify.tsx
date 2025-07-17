@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+export const dynamic = "force-dynamic";
 type SpotifyTokenResponse = {
   access_token: string;
   token_type: string;
@@ -42,7 +42,6 @@ type RecentlyPlayedResponse = {
 
 let cachedAccessToken: string | null = null;
 let tokenExpiresAt: number | null = null;
-export const dynamic = "force-dynamic";
 async function getSpotifyToken(): Promise<string> {
   const now = Date.now();
 
@@ -59,6 +58,7 @@ async function getSpotifyToken(): Promise<string> {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
+    cache: "no-store",
     body: new URLSearchParams({
       grant_type: "refresh_token",
       client_id: clientId,
@@ -82,11 +82,11 @@ export default async function Spotify() {
   try {
     const accessToken = await getSpotifyToken();
 
-    // Try currently playing
     const currentRes = await fetch("https://api.spotify.com/v1/me/player/currently-playing?market=IN", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      cache: "no-store",
     });
 
     let track: Track | null = null;
@@ -100,12 +100,12 @@ export default async function Spotify() {
       }
     }
 
-    // Fallback to recently played
     if (!track) {
       const recentRes = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=1", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        cache: "no-store",
       });
 
       if (recentRes.status === 200) {
