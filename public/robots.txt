@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://vinm.me
+
+# Sitemaps
+Sitemap: https://vinm.me/sitemap.xml

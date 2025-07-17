@@ -1,4 +1,3 @@
-
 import { notFound } from 'next/navigation';
 import rehypeHighlight from 'rehype-highlight';
 import { getPostBySlug, getAllPost } from '@/lib/blog';

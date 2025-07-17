@@ -1,6 +1,18 @@
+import type { Metadata } from 'next';
 
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { RiGithubFill } from "react-icons/ri";
+
+export const metadata: Metadata = {
+  title: "Projects | Vinayak Maheswari",
+  description: 'Explore my projects, showcasing my skills in web and mobile development. From innovative web applications to efficient mobile solutions, discover how I bring ideas to life through code.',
+  icons: {
+    icon: 'https://avatars.githubusercontent.com/u/96346957?v=4',
+    shortcut: 'https://avatars.githubusercontent.com/u/96346957?v=4',
+  },
+
+};
+
 const projects = [
   {
     title: "Crux",
