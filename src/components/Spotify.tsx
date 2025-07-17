@@ -42,7 +42,7 @@ type RecentlyPlayedResponse = {
 
 let cachedAccessToken: string | null = null;
 let tokenExpiresAt: number | null = null;
-
+export const dynamic = "force-dynamic";
 async function getSpotifyToken(): Promise<string> {
   const now = Date.now();
 
