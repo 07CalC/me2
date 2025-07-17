@@ -20,7 +20,14 @@ export default function RightPanel() {
       <Experience />
       <Blogs />
 
-      <Suspense fallback={<div className="flex items-center justify-center my-3 w-full">Loading...</div>}>
+      <Suspense fallback={<div className="grid grid-cols-53 gap-1">
+        {Array.from({ length: 7 * 53 }).map((_, i) => (
+          <div
+            key={i}
+            className="w-5 h-5 bg-gray-800 animate-pulse rounded-sm"
+          />
+        ))}
+      </div>}>
         <div className="max-w-full flex flex-col gap-y-5">
           <div className="sm:hidden">
             <Github />
@@ -28,7 +35,7 @@ export default function RightPanel() {
           <Heatmap />
         </div>
       </Suspense >
-      <Suspense fallback={<div className="flex items-center bg-purple-800/40 text-white px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
+      <Suspense fallback={<div className="flex items-center sm:hidden bg-purple-800/40 text-white px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
         <div className="w-16 h-16 rounded bg-purple-700/50 mr-4" />
         <div className="flex-1 space-y-2">
           <div className="h-4 bg-purple-700/50 rounded w-32"></div>
