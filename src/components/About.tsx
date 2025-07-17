@@ -37,11 +37,11 @@ export default function About() {
           <RiDiscordFill className="text-5xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
       </div>
-      <Link href="/resume.pdf" target="_blank" className="text-2xl flex items-center gap-x-2 font-semibold hover:underline">
+      <Link href="/resume.pdf" target="_blank" className="text-2xl flex items-center gap-x-2 font-semibold hover:underline sm:hidden">
         Resume
         <FaLocationArrow className="text-2xl" />
       </Link>
-      <Link href="https://github.com/07calc/aurora" target="_blank" className="text-2xl font-semibold hover:underline">
+      <Link href="https://github.com/07calc/aurora" target="_blank" className="text-2xl sm:hidden font-semibold hover:underline">
         Arch btw
       </Link>
 

@@ -45,7 +45,6 @@ export default async function Heatmap() {
     "bg-[#ffffff99]",
     "bg-[#ffffff]",
   ];
-  console.log(contributions)
 
   return (
     <>
