@@ -1,18 +1,15 @@
 import { MdOutlineMailOutline } from "react-icons/md";
-import { RiDiscordFill, RiGithubFill, RiInstagramLine, RiLinkedinBoxLine, RiTwitterXLine } from "react-icons/ri";
-import { HiOutlineDocumentDownload } from "react-icons/hi";
-import { GrArchlinux } from "react-icons/gr";
+import { RiDiscordFill, RiGithubFill, RiLinkedinBoxLine, RiTwitterXLine } from "react-icons/ri";
 import Link from "next/link";
 import Spotify from "./Spotify";
 import { Suspense } from "react";
-import Loading from "./Loading";
 import { FaLocationArrow } from "react-icons/fa6";
 import Github from "./Github";
 
 
 export default function LeftPanel() {
   return (
-    <div className="hidden sm:flex flex-col items-start justify-start h-full gap-y-5 overflow-y-scroll p-4">
+    <div className="hidden sm:flex flex-col items-start justify-start h-full gap-y-5 p-4">
       <img
         src="https://avatars.githubusercontent.com/u/96346957?v=4"
         alt="me"
@@ -53,11 +50,11 @@ export default function LeftPanel() {
         <Github />
       </Suspense>
       <Suspense fallback={
-        <div className="flex items-center bg-purple-800 text-white px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
-          <div className="w-16 h-16 rounded bg-purple-700 mr-4" />
+        <div className="flex items-center bg-purple-800/40 text-white px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
+          <div className="w-16 h-16 rounded bg-purple-700/50 mr-4" />
           <div className="flex-1 space-y-2">
-            <div className="h-4 bg-purple-700 rounded w-32"></div>
-            <div className="h-3 bg-purple-700 rounded w-24"></div>
+            <div className="h-4 bg-purple-700/50 rounded w-32"></div>
+            <div className="h-3 bg-purple-700/50 rounded w-24"></div>
           </div>
         </div>
       }>

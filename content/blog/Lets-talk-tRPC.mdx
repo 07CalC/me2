@@ -1,0 +1,350 @@
+---
+title: "Lets talk tRPC"
+date: "2025-07-01"
+description: "What's tRPC and why i fell in love at first sight. Lets setup tRPC for NextJs"
+tags: ["WebDev", "typescript"]
+image: "https://media.sitepen.com/blog-images/2022/12/Intro-to-tRPC.jpg"
+---
+
+If you're building a fullstack app using any javascript framework with typescript, there is a hight chance that you had issues with keeping your API types sync between the *frontend* and *backend*. 
+
+> ### If you don't use typescript, start using and come back here later.
+
+---
+
+# What exactly is tRPC
+
+**Google says:**
+
+> tRPC, which stands for TypeScript Remote Procedure Call, is a library that simplifies building type-safe APIs for TypeScript applications. It allows developers to define API endpoints on the backend and seamlessly access them from the frontend with full type safety, eliminating the need for manual schema definitions, code generation, or runtime type checks.
+
+<H>tRPC</H> stands for *typescript Remote Procedure Call*, so its a remote procedure call built for typescript. 
+
+### What is RPC - Remote procedure call
+
+A normal REST api looks something like this -- the client hits the pre defined route with a request.
+
+for example: 
+
+```bash
+GET https://api.calc.me/api/post?id=123
+```
+
+On the server, there's a handler which will read the query params from the request ( id=123 here),
+validates the input, hits the DB and returns a response.
+
+Unlike REST or GraphQL, where you interact with the resources via URL(s), in a remote procedure call you are directly calling the procedures (functions).
+
+for example:
+
+```javascript
+getPostById(123)
+```
+
+Here `getPostById` is a procedure (function) defined on the server which expects `id: number` as an arguement and return a `post: Post` - a predefined type.
+
+> Think of it as normal function calling - but actual execution happens on a remote server.
+
+---
+
+### how tRPC implements this
+
+With tRPC, these server procedures are available on the client - fully typed and inferred.
+
+No need to manually define request/response schemas.
+
+just define a `functoin` on the server:
+```javascript
+// server
+const appRouter = router({
+  getPostById: publicProcedure
+    .input(z.number())
+    .query(({ input }) => db.posts.findById(input)),
+});
+```
+and you can call this function on the client:
+```javascript
+const { data } = trpc.getPostById.useQuery(123);
+```
+
+and that's it, the data you get is of type `Post` that you defined in the db schema.
+also if you try to pass anything other than a number to the `getPostById` (like a `string`), TypeScript + Zod + tRPC will immediately throw an error at compile time.
+
+> development speed ++ 
+
+### but how does it exactly work? 
+
+> How can we call a procedure which is located in a server from the client?
+
+Deep down tRPC works over `HTTP`, its just a wrapper around `HTTP` to give you a type safe api development experience.
+
+When you call a procedure like:
+```javascript
+trpc.getPostById.useQuery(123)
+```
+
+1. you define the procedure on the server like:
+```javascript
+const appRouter = router({
+  getPostById: publicProcedure
+    .input(z.number())
+    .query(({ input }) => db.posts.findById(input)),
+});
+```
+2. tRPC exposes these procedures over HTTP as API endpoints (lets say: `/api/trpc/getPostById`),
+but tRPC handles all this bu itself, we don't have to worry about all this.
+
+3. On the client, tRPC generate an Object (`trpc` in this case) that mimics the server-side router.
+
+When we call the procedure
+
+it's actually:
+- serialising the input 
+- sending HTTP request to the endpoint created by tRPC (ex: `POST /api/trpc/getPostById`)
+- deserialize the result 
+- return the data 
+ 
+and since we have the `trpc` object on the client side also - it provides the returned data to be fully typed.
+
+> tRPC acts as a type-safe middleman between the server and client, making the development easy and more robust, even though we are making REST calls under the hood.
+
+# Benifits of tRPC
+
+- # <H> End-to-End type safety</H>
+
+from the client to the server and back to client, types are automatically inferred.
+
+you define the input and output types - tRPC and typescript handles the rest.
+```javascript
+// input: z.number() -> output: Post
+```
+if there is any mismatch between types of input or output you'll immediately get a type error.
+
+- # <H>No excess code generation</H>
+
+Unlike GraphQL or gRPC, you don't need to create sceham defination files (.graphql or .proto for gRPC)
+
+Everything is native TypeScript. API as function.
+
+- # <H>Integration with modern stacks</H>
+
+Available for almost every modern typescript framework. 
+
+Be it `express`, `fastify`, `nextjs`, `vite`, `remix` etc.
+
+- # <H>Tanstack Query built in</H>
+
+trpc client integrate seamlessly with Tanstack Query and provieds: 
+
+- Automatic caching
+- Loading state
+- Better error handling
+- Pagination 
+- Refetching
+
+and more...
+
+you call your api like:
+```javascript
+const { data, isLoading, error } = trpc.getPostById.useQuery(postId);
+```
+
+### The bad part
+
+- <H> both client and server must be written in typescript.</H>
+- <H> not ideal for public apis.</H>
+- <H> server and client must stay in sync - any change in the server immediately affects the client also.</H>
+
+# Let's setup tRPC for NextJs
+
+tRPC integrates seamlessly with nextjs, and i would recommend using it in fullstack monorepos.
+
+### 1. Install dependencies:
+```bash
+bun add @trpc/server @trpc/client @trpc/react-query @trpc/next zod superjson @tanstack/react-query
+```
+
+### 2. initialize the tRPC server
+
+in `server/trpc.ts`
+```javascript
+import { initTRPC } from "@trpc/server";
+import superjson from "superjson";
+
+export const t = initTRPC.create({
+  transformer: superjson
+});
+```
+
+> superjson is used to serialize javascript expressions to a superset of JSON (optional).
+
+### 3. create a router
+
+in `server/api/router.ts`
+```javascript
+import { t } from "../trpc";
+import { z } from "zod";
+
+export const appRouter = t.router({
+  test: t.procedure
+    .input(z.string())
+    .query(({input}) => `hello ${input}`)
+});
+
+export type AppRouter = typeof appRouter
+```
+
+### 4. create a API handler (backend endpoint)
+
+This is the endpoint where the actual client server interaction will happen via HTTP.
+
+in `app/api/trpc/[trpc].ts`
+```javascript
+import { createNextApiHandler } from '@trpc/server/adapters/next';
+import { appRouter } from '@/server/api/router';
+
+const handler = (req: Request) => {
+    return createNextApiHandler({
+      endpoint: "/api/trpc",
+      req,
+      router: appRouter,
+      createContext: () => ({}) // Add auth/db if needed
+    })
+}
+
+export { handler as GET, handler as POST }
+```
+
+### 5. setup tRPC client
+
+in `utils/trpc.ts`
+```javascript
+import { createTRPCReact } from '@trpc/react-query';
+import type { AppRouter } from '@/server/api/router';
+
+export const trpc = createTRPCReact<AppRouter>();
+```
+
+### 6. wrap your app with trpc.provider and QueryClientProvider
+
+create a `TRPCProvider.tsx`
+```javascript
+'use client';
+
+import { getFetch, httpBatchLink, loggerLink } from "@trpc/client";
+import superjson from "superjson";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
+import { trpc } from "@/util/trpc" // client side trpc
+
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+    }
+  }
+})
+
+export default function TrpcProviders({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const url =
+    process.env.NEXT_PUBLIC_APP_DOMAIN &&
+      !process.env.NEXT_PUBLIC_APP_DOMAIN.includes("localhost")
+      ? `https://www.${process.env.NEXT_PUBLIC_APP_DOMAIN}/api/trpc/`
+      : "http://localhost:3000/api/trpc/";
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        loggerLink({
+          enabled: () => true
+        }),
+        httpBatchLink({
+          url,
+          fetch: (input, init?) => {
+            const fetch = getFetch();
+            return fetch(input, {
+              ...init,
+              credentials: "include"
+            });
+
+          },
+          transformer: superjson
+        })
+      ]
+    })
+  );
+
+  return (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </trpc.Provider>
+  )
+
+
+}
+```
+
+wrap your app with this `TRPCProvider` - in `app/layout.tsx`
+```javascript
+import type { Metadata } from "next";
+import "./globals.css";
+import TrpcProviders from "@/components/providers/TrpcProvider";
+
+
+export const metadata: Metadata = {
+  title: "Create Next App",
+  description: "Generated by create next app",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body>
+          <TrpcProviders>
+            {children}
+          </TrpcProviders>
+      </body>
+    </html>
+  );
+}
+```
+
+> <H> and that's it your app is ready to use tRPC </H>
+
+### Use a procedure in your component
+```javascript
+'use client'
+
+import { trpc } from "@utils/trpc"
+
+export default const Home() {
+  const { data, isLoading, error } = trpc.test.useQuery("calc")  // will return "hello calc"
+
+  return (
+    <p>
+     {data}
+    </p>
+  )
+}
+```
+
+> you can define more procedures in the `appRouter` located at `server/api/router.ts`
+
+
+# Final thougts
+
+tRPC just clicked for me, maybe it won't for you, but it's definately worth a try.
+
+If you are working in a TypeScript monorepo, tRPC is the way to go.
+
+<BlogFooter />

@@ -1,17 +1,22 @@
 import LeftPanel from "@/components/LeftPanel";
 import RightPanel from "@/components/RightPanel";
-import Spotify from "@/components/Spotify";
 
 export default function HomePage() {
   return (
-    <div className="flex h-screen w-full justify-start overflow-hidden">
+    <div className="flex w-full h-screen">
+      {/* Left Panel */}
       <div className="hidden sm:flex w-1/3 overflow-y-auto justify-end">
-        <LeftPanel />
-      </div>
-      <div className="hiden sm:flex w-2/3 overflow-y-auto justify-start">
-        <RightPanel />
+        <div className="w-full flex justify-end h-max px-4 py-6">
+          <LeftPanel />
+        </div>
       </div>
 
-    </div >
+      {/* Right Panel */}
+      <div className="flex w-full sm:w-2/3 overflow-y-auto justify-start">
+        <div className="w-full h-max px-4 py-6">
+          <RightPanel />
+        </div>
+      </div>
+    </div>
   );
 }

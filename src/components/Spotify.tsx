@@ -114,7 +114,7 @@ export default async function Spotify() {
           </div>
         )}
 
-        <Link target="_blank" href={track.external_urls.spotify} className="flex items-center bg-purple-800 text-white px-4 py-2 rounded-lg cursor-pointer w-[300px] h-[100px]">
+        <Link target="_blank" href={track.external_urls.spotify} className="flex items-center bg-purple-800/40 text-white px-4 py-2 rounded-lg cursor-pointer w-[300px] h-[100px]">
           {albumImage && (
             <img
               src={albumImage}
