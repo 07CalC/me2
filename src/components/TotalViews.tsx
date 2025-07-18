@@ -12,7 +12,7 @@ export default async function TotalViews() {
         Views:
       </div>
       <div className="text-white font-extrabold text-2xl mb-0">
-        {totalViews ? totalViews : "0"}
+        {totalViews ? totalViews.toLocaleLowerCase() : "0"}
       </div>
     </div>
   );

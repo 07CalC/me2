@@ -1,11 +1,21 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoMdMenu } from "react-icons/io";
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  useEffect(() => {
+    const increamentView = async () => {
+      try {
+        await fetch("/api/incrementView")
+      } catch (error) {
+        console.error("Error incrementing views:", error);
+      }
+    }
+    increamentView();
+  }, [])
   return (
     <>
       <nav className="flex items-center justify-between p-4 bg-[#161411]/90 w-full fixed h-16 top-0 sm:px-80 z-50">
