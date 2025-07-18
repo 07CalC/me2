@@ -1,3 +1,4 @@
+import Link from "next/link";
 
 
 
@@ -38,20 +39,21 @@ export default async function Websites() {
       }
     })
   );
-  console.log(results);
   return (
 
     <div className="flex flex-col items-start  justify-center">
       <div className="text-white font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
-        Websites
+        Websites:
       </div>
-      {
-        results.map((site) => (
-          <div key={site.name} className="text-white text-xl mb-2">
-            {site.name}: <span className={site.status === "UP" ? "text-green-500" : "text-red-500"}>{site.status}</span>
-          </div>
-        ))
-      }
+      <div className="grid grid-cols-2 sm:flex sm:flex-col gap-1 w-full">
+        {
+          results.map((site) => (
+            <Link href={`https://${site.name}`} target="_blank" key={site.name} className="text-white text-lg sm:text-xl mb-2 hover:underline">
+              {site.name}: <span className={site.status === "UP" ? "text-green-500" : "text-red-500"}>{site.status}</span>
+            </Link>
+          ))
+        }
+      </div>
     </div>
   )
 }

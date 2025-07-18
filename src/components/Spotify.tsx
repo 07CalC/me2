@@ -124,32 +124,36 @@ export default async function Spotify() {
     const artistNames = track.artists.map((artist) => artist.name).join(", ");
 
     return (
-      <div className="flex flex-col items-center justify-center">
-        <div className="text-white font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
-          {isPlaying ? "Currently Playing" : "Last Played"}
-          <div
-            className={`w-3 h-3 rounded-full ml-2 ${isPlaying ? "bg-green-500 animate-pulse" : "bg-gray-500"}`}
-          />
-        </div>
-
-        <Link
-          target="_blank"
-          href={track.external_urls.spotify}
-          className="flex items-center bg-purple-800/40 text-white px-4 py-2 rounded-lg cursor-pointer w-[300px] h-[100px]"
-        >
-          {albumImage && (
-            <img
-              src={albumImage}
-              alt={track.name}
-              className="w-16 h-16 rounded mr-4 object-cover"
+      <>
+        <div className="flex flex-col items-center justify-center">
+          <div className="text-white font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
+            {isPlaying ? "Currently Playing" : "Last Played"}
+            <div
+              className={`w-3 h-3 rounded-full ml-2 ${isPlaying ? "bg-green-500 animate-pulse" : "bg-gray-500"}`}
             />
-          )}
-          <div className="overflow-hidden">
-            <div className="font-semibold text-base truncate">{track.name}</div>
-            <div className="text-gray-100 text-sm truncate">{artistNames}</div>
           </div>
-        </Link>
-      </div>
+
+          <Link
+            target="_blank"
+            href={track.external_urls.spotify}
+            className="flex items-center bg-purple-800/40 text-white px-4 py-2 rounded-lg cursor-pointer w-[300px] h-[100px]"
+          >
+            {albumImage && (
+              <img
+                src={albumImage}
+                alt={track.name}
+                className="w-16 h-16 rounded mr-4 object-cover"
+              />
+            )}
+            <div className="overflow-hidden">
+              <div className="font-semibold text-base truncate">{track.name}</div>
+              <div className="text-gray-100 text-sm truncate">{artistNames}</div>
+            </div>
+          </Link>
+        </div>
+        <div className="border-b sm:hidden border-white w-full my-4" />
+
+      </>
     );
   } catch (error) {
     console.error("Error fetching Spotify data:", error);

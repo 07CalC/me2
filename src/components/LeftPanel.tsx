@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { FaLocationArrow } from "react-icons/fa6";
 import Github from "./Github";
 import Websites from "./Websites";
-import Loading from "./Loading";
+import TotalViews from "./TotalViews";
 
 
 export default function LeftPanel() {
@@ -17,6 +17,9 @@ export default function LeftPanel() {
         alt="me"
         className="w-80 h-80 mb-4 object-cover"
       />
+      <Suspense fallback={<div className="w-80 h-80 bg-gray-800 animate-pulse rounded-lg mb-4" />}>
+        <TotalViews />
+      </Suspense>
       <div className="flex gap-x-2 items-center">
         <Link href="mailto:hello@vinm.me" target="_blank">
           <MdOutlineMailOutline className="text-3xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
@@ -62,7 +65,17 @@ export default function LeftPanel() {
       }>
         <Spotify />
       </Suspense>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<div className="flex flex-col items-start justify-center animate-pulse">
+        <div className="text-white font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
+          Websites
+        </div>
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="flex items-center space-x-4 mb-2">
+            <div className="w-32 h-6 bg-gray-700 rounded" />
+            <div className="w-12 h-6 bg-gray-800 rounded" />
+          </div>
+        ))}
+      </div>}>
         <Websites />
       </Suspense>
 

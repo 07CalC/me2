@@ -6,6 +6,8 @@ import Projects from "./Projects";
 import Blogs from "./Blogs";
 import Github from "./Github";
 import Spotify from "./Spotify";
+import Websites from "./Websites";
+import TotalViews from "./TotalViews";
 
 export default function RightPanel() {
   return (
@@ -15,6 +17,11 @@ export default function RightPanel() {
         alt="Vinayak's Avatar"
         className="w-64 h-64 mb-4 sm:hidden"
       />
+      <div className="sm:hidden">
+        <Suspense fallback={<div className="w-40 h-8 bg-gray-800 animate-pulse rounded-lg mb-4" />}>
+          <TotalViews />
+        </Suspense>
+      </div>
       <About />
       <Projects />
       <Experience />
@@ -47,7 +54,21 @@ export default function RightPanel() {
           <Spotify />
         </div>
       </Suspense>
-
+      <Suspense fallback={<div className="flex sm:hidden flex-col items-start justify-center animate-pulse">
+        <div className="text-white font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
+          Websites
+        </div>
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="flex items-center space-x-4 mb-2">
+            <div className="w-32 h-6 bg-gray-700 rounded" />
+            <div className="w-12 h-6 bg-gray-800 rounded" />
+          </div>
+        ))}
+      </div>}>
+        <div className="sm:hidden">
+          <Websites />
+        </div>
+      </Suspense>
     </div >
   )
 }

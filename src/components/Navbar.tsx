@@ -8,7 +8,6 @@ export default function Navbar() {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   return (
     <>
-      {/* Navbar */}
       <nav className="flex items-center justify-between p-4 bg-[#161411]/90 w-full fixed h-16 top-0 sm:px-80 z-50">
         <div className="sm:hidden">
           <IoMdMenu

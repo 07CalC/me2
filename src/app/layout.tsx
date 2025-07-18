@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Roboto_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import { Analytics } from "@vercel/analytics/react";
+
+
 
 const robot = Roboto_Mono({
   subsets: ["latin"],
@@ -78,9 +81,11 @@ export default function RootLayout({
       <body
         className={`${robot.className} text-white pt-16 bg-[#161411] antialiased`}
       >
+        <Analytics />
         <Navbar />
         {children}
       </body>
     </html>
+
   );
 }

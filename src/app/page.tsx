@@ -1,8 +1,11 @@
 import LeftPanel from "@/components/LeftPanel";
 import RightPanel from "@/components/RightPanel";
+import { increamentView } from "@/lib/redis";
 
-export default function HomePage() {
+export default async function HomePage() {
+  await increamentView();
   return (
+
     <div className="flex pb-10 w-full h-screen overflow-y-hidden">
       <div className="hidden sm:flex w-1/3 overflow-y-auto justify-end">
         <div className="w-full flex justify-end h-max px-4 py-6">

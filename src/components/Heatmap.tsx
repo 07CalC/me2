@@ -87,7 +87,7 @@ export default async function Heatmap() {
         </div>
       </div>
 
-      <div className="border-b border-white w-full my-4" />
+      <div className="border-b sm:hidden border-white w-full my-4" />
     </>
 
 
