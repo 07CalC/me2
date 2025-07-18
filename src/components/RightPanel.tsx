@@ -11,7 +11,7 @@ import TotalViews from "./TotalViews";
 
 export default function RightPanel() {
   return (
-    <div className="flex flex-col sm:items-start justify-start gap-y-5 overflow-y-auto max-w-full sm:pr-60">
+    <div className="flex flex-col sm:items-start justify-start gap-y-5 overflow-y-auto max-w-full sm:pr-60 pb-10">
       <img
         src="https://avatars.githubusercontent.com/u/96346957?v=4"
         alt="Vinayak's Avatar"
