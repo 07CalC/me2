@@ -17,7 +17,7 @@ export default function LeftPanel() {
         alt="me"
         className="w-80 h-80 mb-4 object-cover"
       />
-      <Suspense fallback={<div className="w-80 h-80 bg-gray-800 animate-pulse rounded-lg mb-4" />}>
+      <Suspense fallback={<div className="w-40 h-8 bg-gray-800 animate-pulse rounded-lg mb-4" />}>
         <TotalViews />
       </Suspense>
       <div className="flex gap-x-2 items-center">
