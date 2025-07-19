@@ -19,7 +19,7 @@ export default async function UnsubscribePage({ searchParams }: props) {
   }
 
   try {
-    await redis.srem("newsletter:emails", email);
+    await redis.sRem("newsletter:emails", email);
     return <div className="text-green-500">You have been successfully unsubscribed.</div>;
   } catch (error) {
     console.error("Error unsubscribing:", error);
