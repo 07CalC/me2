@@ -3,15 +3,16 @@ import { redis } from "@/lib/redis";
 
 
 
-type props = {
-  searchParams: {
-    email: string;
-  }
+type SearchParams = {
+  email: string
 }
 
+type props = {
+  searchParams: Promise<SearchParams>
+}
 
 export default async function UnsubscribePage({ searchParams }: props) {
-  const email = searchParams.email;
+  const email = (await searchParams).email;
 
   if (!email) {
     return <div className="text-red-500">Email is required to unsubscribe.</div>;
