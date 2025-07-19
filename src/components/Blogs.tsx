@@ -1,6 +1,7 @@
 import { getAllPost, Post } from "@/lib/blog";
 import Link from "next/link";
 import { FaExternalLinkAlt } from "react-icons/fa";
+import { NewsletterSignup } from "./NewsLetterSignup";
 
 
 
@@ -51,6 +52,8 @@ export default function Blogs() {
         view all
         <FaExternalLinkAlt className="inline-block text-2xl ml-4" />
       </Link>
+      <NewsletterSignup />
+
       <div className="border-b border-white w-full my-4" />
 
     </>

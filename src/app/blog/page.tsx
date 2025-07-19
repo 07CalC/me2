@@ -1,7 +1,7 @@
-
 import { Metadata } from 'next';
 import { getAllPost, Post } from '../../lib/blog';
 import Link from 'next/link';
+import { NewsletterSignup } from '@/components/NewsLetterSignup';
 
 
 export const metadata: Metadata = {
@@ -10,8 +10,10 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
-  const posts = getAllPost(); return (
-    <section className="mx-auto py-8 px-3 sm:px-80 justify-start flex">
+  const posts = getAllPost();
+  return (
+    <section className="mx-auto py-8 px-3 sm:px-80 justify-center items-center gap-y-10 flex flex-col">
+      <NewsletterSignup />
       <div className="flex flex-col gap-6 mt-8">
         {posts.map((post: Post) => (
           <Link

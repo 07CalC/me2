@@ -18,7 +18,7 @@ export default function Navbar() {
   }, [])
   return (
     <>
-      <nav className="flex items-center justify-between p-4 bg-[#161411]/90 w-full fixed h-16 top-0 sm:px-80 z-50">
+      <nav className="flex border-b border-b-white items-center justify-between p-4 bg-[#161411] w-full fixed h-16 top-0 sm:px-80 z-50">
         <div className="sm:hidden">
           <IoMdMenu
             className="text-3xl text-purple-500 cursor-pointer"

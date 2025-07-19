@@ -3,6 +3,7 @@ let cachedData: {
   totalStars: number;
   totalRepos: number;
   lastCommit: string | null;
+  totalCommits: number | null;
 } | null = null;
 
 let lastFetched = 0;
@@ -39,7 +40,7 @@ export async function getGitHubStats() {
   const lastCommitTime = events.find((e: any) => e.type === "PushEvent")?.created_at ?? null;
 
   const lastCommit = lastCommitTime ? new Date(lastCommitTime).toDateString() : null;
-  cachedData = { totalStars, totalRepos, lastCommit };
+  cachedData = { totalStars, totalRepos, lastCommit, totalCommits: null };
   lastFetched = now;
 
   return cachedData;

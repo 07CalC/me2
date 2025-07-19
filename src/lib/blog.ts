@@ -24,7 +24,6 @@ export function getAllPost() {
     const slug = filename.replace(/\.mdx$/, '');
     const fileContent = fs.readFileSync(path.join(BLOG_DIR, filename), 'utf-8');
     const { data } = matter(fileContent);
-
     return {
       slug,
       meta: data as Post['meta'],
