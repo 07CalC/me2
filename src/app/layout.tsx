@@ -12,7 +12,7 @@ const robot = Roboto_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Vinayak Maheswari",
+  title: "Vinayak Maheshwari",
   description: 'Hi I am Vinayak Maheshwari, a fresher at the Indian Institute of Information Technology Allahabad. I am passionate about software development, particularly in web and mobile applications. I enjoy learning new technologies and building projects that solve real-world problems.',
   icons: {
     icon: 'https://avatars.githubusercontent.com/u/96346957?v=4',
