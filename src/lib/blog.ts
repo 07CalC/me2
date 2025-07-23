@@ -20,7 +20,7 @@ const BLOG_DIR = path.join(process.cwd(), 'content/blog');
 export function getAllPost() {
   const files = fs.readdirSync(BLOG_DIR);
 
-  return files.map((filename) => {
+  const posts = files.map((filename) => {
     const slug = filename.replace(/\.mdx$/, '');
     const fileContent = fs.readFileSync(path.join(BLOG_DIR, filename), 'utf-8');
     const { data } = matter(fileContent);
@@ -28,7 +28,13 @@ export function getAllPost() {
       slug,
       meta: data as Post['meta'],
     };
-  })
+  });
+
+  const sortedPosts = posts.sort((a, b) => {
+    return new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime();
+  });
+
+  return sortedPosts;
 }
 
 

@@ -1,0 +1,128 @@
+---
+title: "Deep dive into databases - 1"
+date: "2025-07-23"
+description: "some of my learnings of database internals - how databases works. Part - 1"
+tags: ["internals", "databases"]
+image: "https://media.licdn.com/dms/image/v2/D4D12AQF0x0EKo_R5Iw/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1691643933196?e=2147483647&v=beta&t=hM2T5Wny8QEScZbVZE9jjQCHf0SohJw9LSqXTmCYq3c"
+---
+
+Databases are one of the key building block of any type of modern technology, we have to store the information somewhere for future retrieval.
+
+Knowingly or unknowingly we all use databases, Sqlite - everyone must have used this even though most people dont know about it,
+it's in your phones, laptops, maybe refrigarator or washing machine.
+
+so the question is how databases actually works?, how is the retrieval of information so fast?, how any db query 1 particular row out of millions in some 5-10 ms.
+
+# Types of databases
+
+1. **Online transaction processing(OLTP) databases**:
+these handle a large number of user-facing requests and transactions.
+Queries are often predefined and short lived.
+
+2. **Online analytical processing (OLAP) databases**:
+These handle complex aggregations. OLAP databases are often used
+for analytics and data warehousing, and are capable of handling
+complex, long-running ad hoc queries.
+
+3. **Hybrid Transactional/Analytical Processing (HTAP) databases**:
+These databases combine properties of both OLTP and OLAP stores.
+
+# DBMS architecture
+
+> DBMS is database management system - its the piece of software that allows you to interact with the database in more humanly way possible.
+
+Most DBMS uses a client/server model, where the db system instances (called nodes) take the role of servers, and the application instances take the role of clients.
+
+Client requests arrive through the transpost subsytem. requests come in the form of queries, most often expressed in some query language (SQL for ex.). the transport subsystem is also responsible for communication with other nodes in the db cluster.
+
+![DBMS architecture](https://raw.githubusercontent.com/07CalC/DbInternals/refs/heads/main/media/figure1.1.png?token=GHSAT0AAAAAADHZVROF2ZOAXKFUOVNKRBTU2EAXOKA)
+
+Upon receiving a req, the transport sybsystem hands the query over to the query processor, which parses, interprets and validates it.
+
+parsed query is passed to the query optimizer, which first eliminates impossible and redundant operations, and attempts to find the most efficient way to execute it based on the internal statistics (index, cardinality, etc.) and data placement )which nodes in the cluster hold the data and the costs associated with its transfer).
+
+the query presented is in the form of execution plan or query plan: a sequence of operations that the db will perform to get the complete results. same query can have multiple execution plans that differ in efficiency, the optimizer chooses the most efficient one.
+
+The execution plan is handled by the execution engine, which collects the results of the execution of local and remote operations. remote execution can involve writing and reading data to and from oter nodes in the cluster and repilcations.
+
+local queries (coming directly from clients or from other nodes) are executed by the storage engine. storage engine has multiple components with dedicated responsibilites.
+
+- *Transaction manager*:
+this schedules transactions, ensuring they are executed in a logical order.
+
+- *Lok manager*:
+this locks on the db objects for running transactions, making sure concurrent operations do not violate the physical data integrity.
+
+- *access methods*:
+manage access and organisation data on the disk.
+access methods include heap files and storage structures such as B-tress or LSM-trees.
+
+- *Buffer manager*:
+caches data pages in memory.
+
+- *Recovery manager*:
+maintains operation log and restoring system state in case of a failure.
+
+transaction and lock managers are responsible for concurrency control. they guarantee data integrity ensuring concurrent operations are executed as efficiently as possible.
+
+# Memory V/S Disk-based databases:
+
+- **memory**: stores the contents almost exclusively in the RAM and use disk for recovery and loggin.
+
+- **disk**: stores data mostly on the dist, and use memory for caching.
+
+main memory db are differnt from their disk based counterparts in which data structures, organizations and optimization techniques they use.
+
+**checkpointing**:
+process of periodically flushing the contents of the memory to the disk to ensure that the data is not lost in case of a failure.
+
+disk based db uses specialized storage structures optimized for disk access, random disk access is significantly slower than random memory access, so disk based structures often have a form of wide and short tress.
+handling variable-size data on dis also requires special care, while in memory its often a matter of allocating a fix size block of memory.
+
+# Indexes
+
+lot of people know this term *index* in context of a database but what it really is?
+
+> Book says: auxiliary data structure that allow it to efficiently locate data records without scanning an entire table of every access. Indexes are built using a subset of fields indentifying the record.
+
+index is basically a piece of information which stores a pre computed location of a particular piece of data so that you dont need to find it everytime using searching techniques.
+
+### Data files:
+data files stores the actual record.
+### Index files:
+index files stores the metadata to locate the recored in data files more efficiently.
+
+### Disk block:
+the smallest unit of data that a disk can read or write in a single operation.
+
+# Index files:
+
+index files are used to speed up the access to data records index files are stored as specialized data structures that map keys to their location in respective data files.
+
+### primary index:
+an index on primary (data) file is called the primary index. in most cases primary index is built over a primary key or set of keys indentifying to be primary. all other indexes are called secondary.
+
+### secondary index:
+secondary indexes can point directly to the data record, or simply store its primary key. pointer to a data record can hold an offset to a heap file or an index-organized table. multiple secondary indexes can point to the same record. primary index files hold a unique entry per search key, secondary indexes can hold multiple entries per search key.
+
+> if the order of data records follows the search key order, this index is called *culstered* (also know as clustering). 
+
+![primary and secondary indexes](https://raw.githubusercontent.com/07CalC/DbInternals/refs/heads/main/media/figure1.6.png?token=GHSAT0AAAAAADHZVROEJST65HH67YJFENHS2EAX3KA)
+
+a) two indexes reference data entries directly from secondary index files.
+  
+b) a secondary index goes through the indirection layer of a primary index to locate the data entries.
+
+many database systems have a inherent and explicit primary key, a set of columns that uniquely indentify the db record. in case no primary key is defined, storage engine can create an implicit primary key (mysql, innodb adds a new auto-increment column and fills it values automatically).
+
+### directly referencing data record (through file offset):
+Here, records are accessed using a direct pointer—like a record ID (RID) or file offset. This is a physical reference to the record’s exact location on disk. here the physical address of the record is stored directly.
+
+### primary key referencing:
+Here, records are referenced logically using their primary key, and the DBMS uses a primary index (often a B+ tree) to locate the record. in other words, they primary key value (userId, email) is stored.
+
+- You store the record’s primary key in related data structures.
+- To find the actual record, the system performs a lookup on the primary key index.
+- This index returns the current location of the record.
+
+<BlogFooter />

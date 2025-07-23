@@ -6,7 +6,7 @@ export default async function HomePage() {
   await sendNewsLetterIfNewBlog();
   return (
 
-    <div className="flex pb-10 w-full h-screen overflow-y-hidden">
+    <div className="flex pb-10 w-full max-h-screen overflow-y-hidden">
       <div className="hidden sm:flex w-1/3 overflow-y-auto justify-end">
         <div className="w-full flex justify-end h-max px-4 py-6">
           <LeftPanel />
