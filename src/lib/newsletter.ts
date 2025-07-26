@@ -1,6 +1,6 @@
-import { getAllPost } from "./blog";
-import { redis } from "./redis";
-import { resend } from "./resend"
+import { getAllPost } from "./blog.js";
+import { redis } from "./redis.js";
+import { resend } from "./resend.js"
 const LAST_SENT_BLOG_KEY = "newsletter:lastSent";
 const SUBSCRIBERS_SET = "newsletter:emails";
 
@@ -40,7 +40,8 @@ export async function sendNewsLetterIfNewBlog() {
   `,
       replyTo: "Vinayak <newsletter@vinm.me>",
     })
-    console.log(response)
+    console.log(response.then(res => console.log(res.data!.id)).catch(err => console.error("Error sending email:", err)));
   }))
+  console.log(`Sent newsletter for new blog post: ${latestPost.slug}`);
   await redis.set(LAST_SENT_BLOG_KEY, latestPost.slug);
 }

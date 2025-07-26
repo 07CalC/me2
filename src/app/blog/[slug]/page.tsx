@@ -84,7 +84,6 @@ export default async function BlogPostPage(params: Props) {
 
         <div className='h-1 bg-white w-full mb-8' />
 
-        {/* Fixed MDXRemote Usage */}
         <MDXRemote
           source={post.content}
           components={MDXComponents}

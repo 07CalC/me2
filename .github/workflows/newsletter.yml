@@ -1,0 +1,19 @@
+name: Trigger newsletter after deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: wait for vercel to deploy
+        run: |
+          echo "Waiting for Vercel to deploy..."
+          sleep 120
+      - name: Trigger newsletter
+        run: |
+          curl -X POST https://vinm.me/api/newsletter \
+          -H "Authorization: Bearer ${{ secrets.NEWSLETTER_SECRET }}"

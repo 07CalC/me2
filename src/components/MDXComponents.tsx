@@ -65,7 +65,7 @@ export const MDXComponents: MDXComponentType = {
           text={props.children}
           className="absolute top-0 right-3 opacity-0 group-hover:opacity-100 
                  transition-opacity bg-gray-700/80 hover:bg-gray-600/80 
-                 p-1.5 rounded text-xs"
+                  rounded text-xs"
         />
       </div>
     );
@@ -73,7 +73,7 @@ export const MDXComponents: MDXComponentType = {
   pre: (props) => (
     <pre
       {...props}
-      className="bg-bg text-white max-w-[80vw] rounded-lg overflow-x-auto text-sm md:text-base"
+      className="text-white max-w-[90vw] bg-gray-800 overflow-x-auto text-sm md:text-base"
     />
   ),
   a: (props) => (
