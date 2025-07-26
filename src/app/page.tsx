@@ -1,9 +1,7 @@
 import LeftPanel from "@/components/LeftPanel";
 import RightPanel from "@/components/RightPanel";
-// import { sendNewsLetterIfNewBlog } from "@/lib/newsletter";
 
 export default async function HomePage() {
-  // await sendNewsLetterIfNewBlog();
   return (
 
     <div className="flex pb-10 w-full max-h-screen overflow-y-hidden">

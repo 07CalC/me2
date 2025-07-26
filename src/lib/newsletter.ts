@@ -40,7 +40,7 @@ export async function sendNewsLetterIfNewBlog() {
   `,
       replyTo: "Vinayak <newsletter@vinm.me>",
     })
-    console.log(response.then(res => console.log(res.data!.id)).catch(err => console.error("Error sending email:", err)));
+    response.then(res => console.log(res.data!.id)).catch(err => console.error("Error sending email:", err));
   }))
   console.log(`Sent newsletter for new blog post: ${latestPost.slug}`);
   await redis.set(LAST_SENT_BLOG_KEY, latestPost.slug);
