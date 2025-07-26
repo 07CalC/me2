@@ -50,7 +50,7 @@ export const MDXComponents: MDXComponentType = {
       return (
         <code
           {...props}
-          className="bg-gray-800 px-1 py-0.5 rounded text-sm font-mono"
+          className="bg-gray-800 px-1 py-0.5 rounded text-lg sm:text-xl font-mono"
         />
       );
     }
@@ -58,7 +58,7 @@ export const MDXComponents: MDXComponentType = {
       <div className="relative my-6 group">
         <code
           {...props}
-          className={`block p-4 bg-gray-800 text-sm sm:text-base ${props.className || ''}`}
+          className={`block p-4 bg-gray-800 sm:text-xl text-lg ${props.className || ''}`}
         />
 
         <CopyButton

@@ -82,7 +82,7 @@ export default async function BlogPostPage(params: Props) {
           </div>
         )}
 
-        <div className='h-1 bg-gradient-to-r from-accent to-accent2 w-full mb-8' />
+        <div className='h-1 bg-white w-full mb-8' />
 
         {/* Fixed MDXRemote Usage */}
         <MDXRemote

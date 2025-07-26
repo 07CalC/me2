@@ -1,0 +1,238 @@
+---
+title: "Docker - a beginner friendly guide"
+date: "2025-07-26"
+description: "'But it works on my machine' - that's one of the most important problem docker solves, lets get to know what docker really is, how it works and to get started with docker"
+tags: ["DevOps", "Docker"]
+image: "https://miro.medium.com/v2/resize:fit:1400/1*37qDVEfcM-fbQ3psFL-4-A.png"
+---
+
+# What exactly is docker
+ 
+docker is a simple tool or a piece of software that helps you package your application and all of its dependencies (runtime, dependent modules, config, environment etc) into one single box called a `container`.
+
+best part is this container can run on any machine with any operating system as long as it has the docker engine installed, and it works the same on all machines.
+
+can't say "but it works on my device" anymore.
+
+## The problem it solves
+
+Before docker, running any software on different machine was pain in the back.
+
+lets take a nodejs project you just made:
+
+it works fine on your windows device.
+
+but when you try to deploy it on a linux machine, you might face the following issues:
+
+- different nodejs version on your system and the linux machine you are deploying to.
+- OS related issues.
+- missing dependencies.
+- too much manual work to even start the app.
+
+the classic *it works on my machine* issue.
+
+in the production environment with multiple developers it gets even worse.
+
+### How docker fixes it
+
+Docker lets you pack your whole app including the code and all types of dependencies it require into one single unit (container).
+
+- container has all your code. 
+- the exact runtime you want.
+- all the dependencies your app needs.
+- any system library you need.
+
+this container:
+
+- runs exactly the same way on every machine.
+- is lightweight.
+- easy to deploy.
+
+# How it works
+
+Docker uses client-server architecture. The Docker client talks to the docker daemon which does all the hard task of building, running and distributing the containers.
+
+The docker client and server communicate through `REST API`, over `UNIX` sockets or a network interface.
+
+![docker-architecture](https://docs.docker.com/get-started/images/docker-architecture.webp)
+
+## Docker daemon
+
+the docker daemon `dockerd` listens listens for the docker API and manages all the stuff such as containers, images, networks and volumes. One daemon can also talk to other daemons.
+
+## Docker images
+
+a docker image is a `read-only` template with required instructions to create a docker container.
+it can be thought of a recipe. Most of the time an image is based on another image, with some customization. for example you can create an image based on `node:alpine` and install some node dependencies on it as well as other config details to make your application run.
+
+## Docker conatiner
+
+a docker container is a runnable instance of an image. you can create, start, stop, delete, move a container using the docker API or the docker CLI. you can connect a container to one or more networks, attack storage.
+
+## Docker registries
+
+A Docker registry stores Docker images. Docker Hub is a public registry that anyone can use, and Docker looks for images on Docker Hub by default. You can even run your own private registry.
+
+
+---
+
+
+enough terminologies but how does it actually works?
+
+so docker conatiner is kind of a virtual machine but not with the full potential.
+
+It shares the host machine's kernel, but it's isolated using linux's features like [namespaces](https://en.wikipedia.org/wiki/Linux_namespaces) and [cgroups](https://medium.com/@weidagang/linux-beyond-the-basics-cgroups-f157d93bd755).
+
+
+## Docker-compose
+
+Docker Compose is a tool for defining and running multi-container applications. It is the key to unlocking a streamlined and efficient development and deployment experience.
+
+Compose simplifies the control of your entire application stack, making it easy to manage services, networks, and volumes in a single YAML configuration file. Then, with a single command, you create and start all the services from your configuration file.
+
+# How to use Docker
+
+### lets start with a pre-built app in a container:
+
+install the [docker engine](https://docs.docker.com/engine/install/) first, obv.
+
+lets start by running redis:
+
+```bash
+docker run -d --name redis-server -p 6379:6379 redis
+```
+
+- `docker run`: Starts a new container
+- `-d`: detached mode (even if you kill the current terminal process container won't stop).
+- `--name redis-server`: name of the container you want to give to differentiate from others.
+- `-p 6379:6379`: Map container's port 6379 to host's 6379 (since each container is isolated and has its own network, we need to map the 6379 port of the container to the host as a entry point for the request coming to 6379 of the host).
+- `redis`: the name of the official redis image present on the docker hub.
+
+### now lets dockerize our own app:
+
+lets take one nextjs project i want to dockerize - [crux](https://crux.ix.tc), fun fact crux is totally self hosted using docker, for better speed (almost 2x faster than vercel, lets talk about it some other time).
+
+**Dockerfile**:
+
+Dockerfile is just a set of instructions that tells docker to create the image of you requirements.
+
+Dockerfile is created in the root folder of the app with the exact namespace `Dockerfile`, when you run `docker build` command docker takes the Dockerfile from the root of the project and creates an image based on the instructions you provided in the Dockerfile.
+
+### lets make a very basic Dockerfile according to my requirements.
+
+```Dockerfile
+FROM node:18-alpine
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npx prisma generate
+
+RUN npm run build
+
+CMD npm start
+```
+
+- `FROM node:18-alpine`: the base image i am using (since its a nextjs app we need to run it in a javascript runtime, node this time).
+- `WORKDIR /app`: changes the workdir to app (just a good practice not necessary).
+- `COPY package*.json ./`: copies the `package.json` and `package-lock.json` from the root of my project to the image's working directory.
+- `RUN npm install`: runs the command `npm install` to install all the node modules i defined in the `package.json`.
+- `COPY . .`: copies the whole project to the image including the main code.
+- `RUN npx prisma generate`: runs the command `npx prisma generate`, since i am using prisma as the orm, there is an intermediate step to create the prisma client to use later.
+- `RUN npm run build`: runs the command `npm run build`, since we are using nextjs `npm run build` triggers the `next build` and builds the project.
+- `CMD npm start`: `CMD` defines the entry point of the image - whenever you do `docker run` it runs this entrypoint command.
+
+lets build the image
+
+```bash
+docker build -t crux .
+```
+
+the `-t` stands for tag means we are tagging the image as **crux**. (afaik)
+
+check the image using:
+
+```bash
+docker images
+```
+
+this will list all the images on the device.
+
+![docker images](https://devconnected.com/wp-content/uploads/2020/02/docker-images.png)
+
+**now you can use this image anywhere you want**.
+
+there is a issue with this image - it is very big.
+
+this can be solved with multi-stage build. ([reference](https://solomou.dev/blog/2023-11-26-multi-stage-production-dockerfile-for-next-js))
+
+the final optimized Dockerfile will look like: 
+
+```Dockerfile
+FROM node:18-alpine AS deps
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat
+
+COPY package*.json ./
+
+RUN npm install
+
+
+FROM node:18-alpine AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN npx prisma generate 
+
+RUN npm run build
+
+
+FROM node:18-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]
+```
+
+this multi-stage method will decrease the size of the image to around 20% of the original. in this case it went from ~2GB to 200MB.
+
+
+# Conclusion
+
+this was a very basic overview of the docker for beginners, docker is much more than this. You should definately read the official docs to understand things more clearly.
+
+<BlogFooter />
+
+
+
+
+
+
+
+
+
+
