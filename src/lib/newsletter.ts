@@ -1,6 +1,6 @@
 import { getAllPost } from "./blog.js";
-import { redis } from "./redis.js";
-import { resend } from "./resend.js"
+import { redis } from "./redis";
+import { resend } from "./resend"
 const LAST_SENT_BLOG_KEY = "newsletter:lastSent";
 const SUBSCRIBERS_SET = "newsletter:emails";
 
