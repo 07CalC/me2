@@ -20,7 +20,7 @@ export async function sendNewsLetterIfNewBlog() {
     return;
   }
 
-  await Promise.all(subscribers.map((email) => {
+  await Promise.allSettled(subscribers.map((email) => {
     const response = resend.emails.send({
       from: "Vinayak <newsletter@vinm.me>",
       to: email,
