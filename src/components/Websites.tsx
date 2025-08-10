@@ -9,7 +9,7 @@ const websites: { name: string; url: string }[] = [
   },
   {
     name: "crux.ix.tc",
-    url: "https://crux.ix.tc",
+    url: "https://crux.hs.vc",
   },
   {
     name: "batua.site",
