@@ -7,7 +7,7 @@ const websites: { name: string; url: string }[] = [
     url: "https://vinm.me",
   },
   {
-    name: "crux.ix.tc",
+    name: "crux.hs.vc",
     url: "https://crux.hs.vc",
   },
   {
