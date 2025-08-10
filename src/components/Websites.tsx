@@ -1,6 +1,5 @@
+"use client"
 import Link from "next/link";
-
-
 
 const websites: { name: string; url: string }[] = [
   {
