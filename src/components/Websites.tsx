@@ -13,7 +13,7 @@ async function getStatuses(): Promise<SiteStatus[]> {
   const results: SiteStatus[] = await Promise.all(
     websites.map(async (site) => {
       try {
-        const res = await fetch(site.url, { method: "HEAD", cache: "no-store" });
+        const res = await fetch(site.url, { method: "HEAD", cache: "no-store", next: { revalidate: 3600 } });
         return {
           name: site.name,
           status: res.ok ? "UP" : "DOWN",
