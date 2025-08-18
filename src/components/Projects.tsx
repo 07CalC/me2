@@ -31,7 +31,7 @@ const projects = [
       }
     ],
     github: "https://github.com/07calc/crux",
-    demo: "https://crux.ix.tc/",
+    demo: "https://crux.hs.vc/",
   },
   {
     title: "Cook.nvim",
