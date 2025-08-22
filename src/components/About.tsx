@@ -18,7 +18,7 @@ import { FaLocationArrow } from "react-icons/fa6";
 export default function About() {
   return (
     <>
-      <h1 className="text-3xl font-bold text-white mb-4">Hi, i'm Vinayak a.k.a. CalC</h1>
+      <h1 className="text-4xl font-bold text-white mb-4">Hi, i'm Vinayak a.k.a. CalC</h1>
       <div className="flex sm:hidden gap-x-2 items-center ">
         <Link href="mailto:hello@vinm.me" target="_blank">
           <MdOutlineMailOutline className=" text-white hover:scale-105 sm:text-4xl text-5xl cursor-pointer" />
@@ -37,7 +37,7 @@ export default function About() {
           <RiDiscordFill className="text-5xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
       </div>
-      <Link href="/resume.pdf" target="_blank" className="text-2xl flex items-center gap-x-2 font-semibold hover:underline sm:hidden">
+      <Link href="/resume.pdf" target="_blank" className="text-2xl flex items-center gap-x-2 font-semibold bg-purple-500 p-2 rounded-2xl hover:underline sm:hidden">
         Resume
         <FaLocationArrow className="text-2xl" />
       </Link>
@@ -50,7 +50,7 @@ export default function About() {
         pursuing B.Tech in Electronics and Communication Engineering at IIIT Allahabad.
       </p>
       <p className="text-2xl text-white">
-        I enjoy working across the stack, especially on web and mobile apps, and I’m always looking for ways to turn ideas into clean, functional products.
+        Currently trying to dive deep into Databases and Embedded Systems.
       </p>
 
       <p className="text-2xl text-white">

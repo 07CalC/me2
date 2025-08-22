@@ -8,6 +8,7 @@ import Github from "./Github";
 import Spotify from "./Spotify";
 import Websites from "./Websites";
 import TotalViews from "./TotalViews";
+import { People } from "./People";
 
 export default function RightPanel() {
   return (
@@ -23,8 +24,8 @@ export default function RightPanel() {
         </Suspense>
       </div>
       <About />
-      <Projects />
       <Experience />
+      <Projects />
       <Blogs />
 
       <Suspense fallback={<div className="grid grid-cols-53 gap-1">
@@ -69,6 +70,9 @@ export default function RightPanel() {
           <Websites />
         </div>
       </Suspense>
+      <div>
+        <People />
+      </div>
     </div >
   )
 }

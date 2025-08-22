@@ -38,7 +38,7 @@ export default function LeftPanel() {
           <RiDiscordFill className="text-3xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
       </div>
-      <Link href="/resume.pdf" target="_blank" className="text-2xl flex text-center items-center justify-center gap-x-2 font-semibold hover:underline">
+      <Link href="/resume.pdf" target="_blank" className="text-2xl flex text-center items-center justify-center bg-purple-500 p-2 rounded-2xl gap-x-2 font-semibold hover:underline">
         Resume
         <FaLocationArrow className="text-2xl" />
       </Link>

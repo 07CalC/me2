@@ -137,7 +137,7 @@ const projects = [
   }, {
     title: "Batua",
     description: `A web application that allows users to track their expenses and providing insights into their financial habits.`,
-    image: "https://media.licdn.com/dms/image/v2/D4E22AQFQ2WB2M59kHQ/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1728992067665?e=1755129600&v=beta&t=-YMEbcw8LN7yNI7C6nOgS5OtR7ls0dlV6u_ctVHEAdI",
+    image: "/batua.jpg",
     tech: [
       {
         name: "Express.js",
@@ -169,7 +169,7 @@ const projects = [
       }
     ],
     description: `RustProx is a lightweight, command-line proxy toggler built with Rust, designed to quickly enable or disable system or application-level proxy settings. Ideal for developers and network administrators.`,
-    image: "https://media.licdn.com/dms/image/v2/D4E22AQFVX4gmvMTzFA/feedshare-shrink_2048_1536/B4EZaNNe1AHoAo-/0/1746125844714?e=1755129600&v=beta&t=XKk21g1uc6NrlI3slkYRP4VQghSYPQNhBZy7q5FQoM8",
+    image: "/rustProx.jpg",
     github: "https://github.com/07calc/rustprox"
   },
   {
