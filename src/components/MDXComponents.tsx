@@ -73,7 +73,7 @@ export const MDXComponents: MDXComponentType = {
   pre: (props) => (
     <pre
       {...props}
-      className="text-white max-w-[90vw] bg-gray-800 overflow-x-auto text-sm md:text-base"
+      className="text-white max-w-[90vw] bg-gray-800 overflow-x-auto scrollbar-hidden no-scrollbar text-sm md:text-base"
     />
   ),
   a: (props) => (

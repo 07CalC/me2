@@ -61,7 +61,7 @@ export default function About() {
         I like cats and raccoons, infact i identify as a racc/oon.
       </p>
 
-      <div className="grid grid-cols-4 gap-5 sm:flex overflow-x-auto max-x-full">
+      <div className="grid grid-cols-4 gap-5 sm:flex scrollbar-hidden overflow-x-auto no-scrollbar max-x-full">
         <GrArchlinux className="text-5xl text-white" />
         <SiNeovim className="text-5xl text-white" />
         <SiHyprland className="text-5xl text-white" />

@@ -48,7 +48,7 @@ export default async function Heatmap() {
 
   return (
     <>
-      <div className="max-w-full overflow-x-auto">
+      <div className="max-w-full overflow-x-auto scrollbar-hidden no-scrollbar">
         <div className="flex gap-2 sm:gap-5 md:ml-[36px] text-lg text-muted-foreground mb-2">
           {monthLabels.map((label, i) => (
             <div key={i} className="md:w-[clamp(12px,3vw,20px)] text-center">

@@ -13,7 +13,7 @@ const robot = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: "Vinayak Maheshwari",
-  description: 'Hi I am Vinayak Maheshwari, a fresher at the Indian Institute of Information Technology Allahabad. I am passionate about software development, particularly in web and mobile applications. I enjoy learning new technologies and building projects that solve real-world problems.',
+  description: "I am Vinayak Maheshwari, passionate about software development with a strong interest in web and mobile applications. I enjoy learning new technologies and building projects that solve real-world problems",
   icons: {
     icon: 'https://avatars.githubusercontent.com/u/96346957?v=4',
     shortcut: 'https://avatars.githubusercontent.com/u/96346957?v=4',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
       }
     ],
     title: "Vinayak Maheshwari",
-    description: 'Hi I am Vinayak Maheshwari, a fresher at the Indian Institute of Information Technology Allahabad. I am passionate about software development, particularly in web and mobile applications. I enjoy learning new technologies and building projects that solve real-world problems.',
+    description: "I am Vinayak Maheshwari, passionate about software development with a strong interest in web and mobile applications. I enjoy learning new technologies and building projects that solve real-world problems",
     url: 'https://vinm.me',
     siteName: 'Vinayak Maheshwari',
     type: 'website',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Vinayak Maheshwari",
-    description: 'Hi I am Vinayak Maheshwari, a fresher at the Indian Institute of Information Technology Allahabad. I am passionate about software development, particularly in web and mobile applications. I enjoy learning new technologies and building projects that solve real-world problems.',
+    description: "I am Vinayak Maheshwari, passionate about software development with a strong interest in web and mobile applications. I enjoy learning new technologies and building projects that solve real-world problems",
     images: ['https://vinm.me/opengraph.png'],
     creator: '@not_calc',
   },
@@ -79,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${robot.className} text-white pt-16 bg-[#161411] antialiased`}
+        className={`${robot.className} scrollbar-hidden text-white pt-16 bg-[#161411] antialiased`}
       >
         <Analytics />
         <Navbar />
