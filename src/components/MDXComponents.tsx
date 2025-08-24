@@ -46,6 +46,9 @@ export const MDXComponents: MDXComponentType = {
     />
   ),
   code: (props) => {
+    // const codeString = Array.isArray(props.children)
+    //   ? props.children.join("")
+    //   : props.children || "";
     if (!props.className?.includes('language-')) {
       return (
         <code

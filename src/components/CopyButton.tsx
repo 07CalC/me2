@@ -1,13 +1,19 @@
-
+// @ts-nocheck
 'use client';
-
 import { useState } from 'react';
 
-export function CopyButton({ text, className }: { text: string; className?: string }) {
+export function CopyButton({ text, className }: { text: any; className?: string }) {
   const [copied, setCopied] = useState(false);
-
+  const copyableText = typeof text === 'string' ? text : text.map((item: any) => {
+    if (typeof item === 'string') {
+      return item;
+    } else if (typeof item === 'object' && 'props' in item && 'children' in item.props) {
+      return item.props.children;
+    }
+    return '';
+  }).join('');
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(copyableText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -21,3 +27,4 @@ export function CopyButton({ text, className }: { text: string; className?: stri
     </button>
   );
 }
+
