@@ -27,7 +27,7 @@ export const ToggleTheme = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="rounded-xl border px-4 py-2 text-2xl transition-all dark:border-slate-700 dark:bg-slate-800 dark:text-white border-slate-200 bg-white text-slate-900 shadow"
+      className="rounded-xl px-4 py-2 text-2xl transition-all dark:bg-[#1b1816] dark:text-white bg-white shadow"
     >
       {theme === 'dark' ? <MdLightMode /> : <MdDarkMode />}
     </button>

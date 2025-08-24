@@ -21,7 +21,7 @@ export function CopyButton({ text, className }: { text: any; className?: string 
   return (
     <button
       onClick={copyToClipboard}
-      className={`px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs ${className}`}
+      className={`px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-900 rounded text-sm ${className}`}
     >
       {copied ? 'Copied!' : 'Copy'}
     </button>

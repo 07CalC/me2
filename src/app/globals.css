@@ -20,12 +20,12 @@
 }
 
 :root {
-  --bg-color: #f8fafc;
+  --bg-color: #ffffff;
   --text-color: #0f172a;
 }
 
 .dark {
-  --bg-color: #0f172a;
+  --bg-color: #1b1816;
   --text-color: #f8fafc;
 }
 

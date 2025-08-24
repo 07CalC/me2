@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoMdMenu } from "react-icons/io";
 import { ToggleTheme } from "./ToggleTheme";
+import AnimatedHeader from "./AnimatedHeader";
 
 export default function Navbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,7 +20,7 @@ export default function Navbar() {
   }, [])
   return (
     <>
-      <nav className="flex border-b border-black dark:border-b-white items-center justify-between p-4 bg-[#e2e8f0] dark:bg-[#101020] w-full fixed h-16 top-0 sm:px-80 z-50">
+      <nav className="flex border-b border-black dark:border-b-white items-center justify-between p-4 bg-[#e8e8e8] dark:bg-[#0b0908] w-full fixed h-16 top-0 sm:px-80 z-50">
         <div className="sm:hidden">
           <IoMdMenu
             className="text-3xl text-purple-500 cursor-pointer"
@@ -27,8 +28,8 @@ export default function Navbar() {
           />
         </div>
 
-        <Link href="/" className="text-3xl font-bold text-purple-500">
-          Vinayak
+        <Link href="/">
+          <AnimatedHeader />
         </Link>
 
         <div className="hidden sm:flex gap-x-16">

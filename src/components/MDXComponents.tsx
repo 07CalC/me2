@@ -67,8 +67,8 @@ export const MDXComponents: MDXComponentType = {
         <CopyButton
           text={props.children}
           className="absolute top-0 right-3 opacity-0 group-hover:opacity-100 
-                 transition-opacity bg-gray-700/80 hover:bg-gray-600/80 
-                  rounded text-xs"
+                 transition-opacity   
+                  rounded text-sm"
         />
       </div>
     );
