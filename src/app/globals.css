@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer utilities {
 
@@ -17,4 +17,20 @@
   .scrollbar-hidden {
     scrollbar-width: none;
   }
+}
+
+:root {
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
+}
+
+.dark {
+  --bg-color: #0f172a;
+  --text-color: #f8fafc;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.5s, color 0.5s;
 }

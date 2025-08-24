@@ -43,7 +43,7 @@ export default function RightPanel() {
           <Heatmap />
         </div>
       </Suspense >
-      <Suspense fallback={<div className="flex items-center sm:hidden bg-purple-800/40 text-white px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
+      <Suspense fallback={<div className="flex items-center sm:hidden bg-purple-800/40 px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
         <div className="w-16 h-16 rounded bg-purple-700/50 mr-4" />
         <div className="flex-1 space-y-2">
           <div className="h-4 bg-purple-700/50 rounded w-32"></div>
@@ -56,7 +56,7 @@ export default function RightPanel() {
         </div>
       </Suspense>
       <Suspense fallback={<div className="flex sm:hidden flex-col items-start justify-center animate-pulse">
-        <div className="text-white font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
+        <div className="font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
           Websites
         </div>
         {[...Array(4)].map((_, i) => (

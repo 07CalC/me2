@@ -51,14 +51,14 @@ export default async function Github() {
   const { totalStars, totalRepos, lastCommit } = await getGitHubStats();
   return (
     <div className="flex flex-col justify-center ">
-      <h2 className="text-2xl font-bold text-white mb-4">GitHub Stats:</h2>
-      <div className="text-white text-xl mb-2">
+      <h2 className="text-2xl font-bold mb-4">GitHub Stats:</h2>
+      <div className="text-xl mb-2">
         Total Stars: {totalStars}
       </div>
-      <div className="text-white text-xl mb-2">
+      <div className="text-xl mb-2">
         Total Repositories: {totalRepos}
       </div>
-      <div className="text-white text-xl mb-2">
+      <div className="text-xl mb-2">
         Last Commit: {lastCommit}
       </div>
     </div>

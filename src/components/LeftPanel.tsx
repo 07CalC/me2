@@ -22,20 +22,20 @@ export default function LeftPanel() {
       </Suspense>
       <div className="flex gap-x-2 items-center">
         <Link href="mailto:hello@vinm.me" target="_blank">
-          <MdOutlineMailOutline className="text-3xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <MdOutlineMailOutline className="text-3xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
         <Link href="https://github.com/07calc" target="_blank">
-          <RiGithubFill className="text-3xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiGithubFill className="text-3xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
         <Link href="https://x.com/not_calc" target="_blank">
-          <RiTwitterXLine className="text-3xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiTwitterXLine className="text-3xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
         <Link href="https://www.linkedin.com/in/maheshwarivinayak/" target="_blank">
-          <RiLinkedinBoxLine className="text-3xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiLinkedinBoxLine className="text-3xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
 
         <Link href="https://discord.com/users/notcalc" target="_blank">
-          <RiDiscordFill className="text-3xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiDiscordFill className="text-3xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
       </div>
       <Link href="/resume.pdf" target="_blank" className="text-2xl flex text-center items-center justify-center bg-purple-500 p-2 rounded-2xl gap-x-2 font-semibold hover:underline">
@@ -46,7 +46,7 @@ export default function LeftPanel() {
         Arch btw
       </Link>
       <Suspense fallback={<div className="flex flex-col justify-center animate-pulse">
-        <h2 className="text-2xl font-bold text-white mb-4">GitHub Stats:</h2>
+        <h2 className="text-2xl font-bold mb-4">GitHub Stats:</h2>
 
         <div className="bg-gray-700 rounded h-6 w-40 mb-2"></div>
         <div className="bg-gray-700 rounded h-6 w-48 mb-2"></div>
@@ -55,7 +55,7 @@ export default function LeftPanel() {
         <Github />
       </Suspense>
       <Suspense fallback={
-        <div className="flex items-center bg-purple-800/40 text-white px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
+        <div className="flex items-center bg-purple-800/40 px-4 py-2 rounded-lg w-[300px] h-[100px] animate-pulse">
           <div className="w-16 h-16 rounded bg-purple-700/50 mr-4" />
           <div className="flex-1 space-y-2">
             <div className="h-4 bg-purple-700/50 rounded w-32"></div>
@@ -66,7 +66,7 @@ export default function LeftPanel() {
         <Spotify />
       </Suspense>
       <Suspense fallback={<div className="flex flex-col items-start justify-center animate-pulse">
-        <div className="text-white font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
+        <div className="font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
           Websites
         </div>
         {[...Array(4)].map((_, i) => (

@@ -39,11 +39,11 @@ export default async function Heatmap() {
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; ``
 
   const levelColors = [
-    "bg-[#ffffff0A]",
-    "bg-[#ffffff33]",
-    "bg-[#ffffff66]",
-    "bg-[#ffffff99]",
-    "bg-[#ffffff]",
+    "dark:bg-[#ffffff0A] bg-[#0000000A]",
+    "dark:bg-[#ffffff33] bg-[#00000033]",
+    "dark:bg-[#ffffff66] bg-[#00000066]",
+    "dark:bg-[#ffffff99] bg-[#00000099]",
+    "dark:bg-[#ffffff] bg-[#000000ff]",
   ];
 
   return (
@@ -87,7 +87,7 @@ export default async function Heatmap() {
         </div>
       </div>
 
-      <div className="border-b border-white w-full my-4" />
+      <div className="border-b border-black dark:border-white w-full my-4" />
     </>
 
 

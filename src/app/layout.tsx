@@ -77,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" data-theme="dark">
       <body
         className={`${robot.className} scrollbar-hidden text-white pt-16 bg-[#161411] antialiased`}
       >

@@ -14,7 +14,7 @@ export function NewsletterSignup() {
   if (isSubscribed) {
     return (
       <div className="w-full mt-8">
-        <p className="text-white text-lg font-semibold">You are already subscribed to the newsletter!</p>
+        <p className="text-lg font-semibold">You are already subscribed to the newsletter!</p>
       </div>
     )
   }
@@ -38,7 +38,7 @@ export function NewsletterSignup() {
 
   return (
     <form onSubmit={subscribe} className="w-full my-4">
-      <label className="text-white text-lg font-semibold">Subscribe to my newsletter</label>
+      <label className="text-lg font-semibold">Subscribe to my newsletter</label>
       <div className="flex gap-2 mt-2">
         <input
           type="email"
@@ -46,12 +46,12 @@ export function NewsletterSignup() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="w-full px-4 py-2 rounded-md bg-zinc-800 text-white border border-white/20 focus:outline-none"
+          className="w-full px-4 py-2 rounded-md bg-zinc-200 dark:bg-zinc-800 border border-white/80 dark:border-white/20 focus:outline-none"
         />
         <button
           type="submit"
           disabled={status === "loading"}
-          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+          className="px-4 py-2 bg-purple-600 rounded-md hover:bg-purple-700"
         >
           {status === "loading" ? "..." : "Subscribe"}
         </button>

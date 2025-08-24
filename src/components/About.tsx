@@ -18,23 +18,23 @@ import { FaLocationArrow } from "react-icons/fa6";
 export default function About() {
   return (
     <>
-      <h1 className="text-4xl font-bold text-white mb-4">Hi, i'm Vinayak a.k.a. CalC</h1>
+      <h1 className="text-4xl font-bold mb-4">Hi, i'm Vinayak a.k.a. CalC</h1>
       <div className="flex sm:hidden gap-x-2 items-center ">
         <Link href="mailto:hello@vinm.me" target="_blank">
-          <MdOutlineMailOutline className=" text-white hover:scale-105 sm:text-4xl text-5xl cursor-pointer" />
+          <MdOutlineMailOutline className=" hover:scale-105 sm:text-4xl text-5xl cursor-pointer" />
         </Link>
         <Link href="https://github.com/07calc" target="_blank">
-          <RiGithubFill className="text-5xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiGithubFill className="text-5xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
         <Link href="https://x.com/not_calc" target="_blank">
-          <RiTwitterXLine className="text-5xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiTwitterXLine className="text-5xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
         <Link href="https://www.linkedin.com/in/maheshwarivinayak/" target="_blank">
-          <RiLinkedinBoxLine className="text-5xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiLinkedinBoxLine className="text-5xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
 
         <Link href="https://discord.com/users/notcalc" target="_blank">
-          <RiDiscordFill className="text-5xl text-white hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
+          <RiDiscordFill className="text-5xl hover:scale-105 sm:text-4xl lg:text-5xl cursor-pointer" />
         </Link>
       </div>
       <Link href="/resume.pdf" target="_blank" className="text-2xl flex items-center gap-x-2 font-semibold bg-purple-500 p-2 rounded-2xl hover:underline sm:hidden">
@@ -46,36 +46,36 @@ export default function About() {
       </Link>
 
 
-      <p className="text-2xl text-white">
+      <p className="text-2xl ">
         pursuing B.Tech in Electronics and Communication Engineering at IIIT Allahabad.
       </p>
-      <p className="text-2xl text-white">
+      <p className="text-2xl ">
         Currently trying to dive deep into Databases and Embedded Systems.
       </p>
 
-      <p className="text-2xl text-white">
+      <p className="text-2xl ">
         I mostly work in Rust and TypeScript, choosing languages based on the kind of reliability and control I need.
         I like my tools fast, local-first, and hackable.
       </p>
-      <p className="text-2xl text-white font-medium">
+      <p className="text-2xl font-medium">
         I like cats and raccoons, infact i identify as a racc/oon.
       </p>
 
       <div className="grid grid-cols-4 gap-5 sm:flex scrollbar-hidden overflow-x-auto no-scrollbar max-x-full">
-        <GrArchlinux className="text-5xl text-white" />
-        <SiNeovim className="text-5xl text-white" />
-        <SiHyprland className="text-5xl text-white" />
-        <VscTerminalLinux className="text-5xl text-white" />
-        <SiTypescript className="text-5xl text-white" />
-        <FaReact className="text-5xl text-white" />
-        <FaRust className="text-5xl text-white" />
-        <SiPostgresql className="text-5xl text-white" />
-        <RiNextjsFill className="text-5xl text-white" />
-        <SiTrpc className="text-5xl text-white" />
-        <FaDocker className="text-5xl text-white" />
-        <SiGimp className="text-5xl text-white" />
+        <GrArchlinux className="text-5xl " />
+        <SiNeovim className="text-5xl " />
+        <SiHyprland className="text-5xl " />
+        <VscTerminalLinux className="text-5xl " />
+        <SiTypescript className="text-5xl " />
+        <FaReact className="text-5xl " />
+        <FaRust className="text-5xl " />
+        <SiPostgresql className="text-5xl" />
+        <RiNextjsFill className="text-5xl " />
+        <SiTrpc className="text-5xl " />
+        <FaDocker className="text-5xl " />
+        <SiGimp className="text-5xl " />
       </div>
-      <div className="border-b border-white w-full my-4" />
+      <div className="border-b border-black dark:border-white w-full my-4" />
     </>
   )
 }

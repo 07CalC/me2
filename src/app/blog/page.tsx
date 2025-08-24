@@ -19,7 +19,7 @@ export default async function BlogPage() {
           <Link
             href={`/blog/${post.slug}`}
             key={post.slug}
-            className="relative bg-surface pb-8 flex flex-col sm:flex-row gap-y-3 border-b border-dashed border-white "
+            className="relative bg-surface pb-8 flex flex-col sm:flex-row gap-y-3 border-b border-dashed border-black dark:border-white "
           >
             {post.meta.image && (
               <img
@@ -34,7 +34,7 @@ export default async function BlogPage() {
                 {post.meta.title}
               </h3>
 
-              <p className="text-white text-xl px-2">
+              <p className="text-xl px-2">
                 {post.meta.description}
               </p>
             </div>

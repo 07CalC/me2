@@ -47,7 +47,7 @@ export default async function BlogPostPage(params: Props) {
   return (
     <main className="min-h-screen flex items-start justify-center font-mono text-base leading-relaxed">
       <article className="mx-auto gap-y-3 rounded-lg py-4 px-4 max-w-5xl text-start ">
-        <h1 className="text-3xl md:text-4xl font-bold text-accent mb-4">{post.meta.title}</h1>
+        <h1 className="text-3xl text-purple-800 dark:text-purple-500 md:text-4xl font-bold text-accent mb-4">{post.meta.title}</h1>
 
         <p className="text-2xl mb-4 text-pink">{post.meta.description}</p>
         <div className="text-lg text-text mb-8 flex flex-col items-start gap-2">

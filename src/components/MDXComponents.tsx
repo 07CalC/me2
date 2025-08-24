@@ -7,7 +7,7 @@ export const MDXComponents: MDXComponentType = {
   h1: (props) => {
     return (
       <h1
-        className="text-4xl font-bold font-mono text-start text-purple-500 my-6"
+        className="text-4xl font-bold font-mono text-start text-purple-800 dark:text-purple-500 my-6"
         {...props}
       />
     )
@@ -15,13 +15,13 @@ export const MDXComponents: MDXComponentType = {
   h2: (props) => (
     <h2
       {...props}
-      className="text-3xl font-semibold font-mono text-start text-accent2 my-5 text-purple-300"
+      className="text-3xl font-semibold font-mono text-start text-accent2 my-5 text-purple-600 dark:text-purple-300"
     />
   ),
   h3: (props) => (
     <h3
       {...props}
-      className="text-2xl font-semibold font-mono text-start text-accent2 my-4 text-purple-200"
+      className="text-2xl font-semibold font-mono text-start text-accent2 my-4 text-purple-500 dark:text-purple-200"
     />
   ),
   p: (props) => (
@@ -50,7 +50,7 @@ export const MDXComponents: MDXComponentType = {
       return (
         <code
           {...props}
-          className="bg-gray-800 px-1 py-0.5 rounded text-lg sm:text-xl font-mono"
+          className="bg-gray-300 dark:bg-gray-700 px-1 py-0.5 rounded text-lg sm:text-xl font-mono"
         />
       );
     }
@@ -58,7 +58,7 @@ export const MDXComponents: MDXComponentType = {
       <div className="relative my-6 group">
         <code
           {...props}
-          className={`block p-4 bg-gray-800 sm:text-xl text-lg ${props.className || ''}`}
+          className={`block p-4 bg-gray-300 dark:bg-gray-700 sm:text-xl text-lg ${props.className || ''}`}
         />
 
         <CopyButton
@@ -73,7 +73,7 @@ export const MDXComponents: MDXComponentType = {
   pre: (props) => (
     <pre
       {...props}
-      className="text-white max-w-[90vw] bg-gray-800 overflow-x-auto scrollbar-hidden no-scrollbar text-sm md:text-base"
+      className="max-w-[90vw] bg-gray-300 dark:bg-gray-700 overflow-x-auto scrollbar-hidden no-scrollbar text-sm md:text-base"
     />
   ),
   a: (props) => (

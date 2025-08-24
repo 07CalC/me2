@@ -32,7 +32,7 @@ export default function Blogs() {
                 {post.meta.title}
               </h3>
 
-              <p className="text-white text-xl px-2">
+              <p className="text-xl px-2">
                 {post.meta.description}
               </p>
             </div>
@@ -48,13 +48,13 @@ export default function Blogs() {
         ))
 
       }
-      <Link href={"/blog"} className="text-2xl font-semibold px-5 flex items-center justify-start text-white hover:underline mt-8">
+      <Link href={"/blog"} className="text-2xl font-semibold px-5 flex items-center justify-start hover:underline mt-8">
         view all
         <FaExternalLinkAlt className="inline-block text-2xl ml-4" />
       </Link>
       <NewsletterSignup />
 
-      <div className="border-b border-white w-full my-4" />
+      <div className="border-b border-black dark:border-white w-full my-4" />
 
     </>
   )
