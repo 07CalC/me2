@@ -4,7 +4,7 @@ export const People = () => {
     { name: 'Sam', username: 'sam-23-eer' },
     { name: 'JoyBoy', username: 'joyboy1210', url: 'https://portfolio-lhnw.vercel.app' },
     { name: 'HGR', username: 'hgrgamer' },
-    { name: 'BitFlipper', username: 'bitflipper19' }
+    { name: 'BitFlipper', username: 'bitflipper19', url: 'https://bitflipper19.github.io/ezio/' }
   ]
   return (
 
