@@ -3,17 +3,14 @@
 
 @layer utilities {
 
-  /* Hide scrollbar for Chrome, Safari, Opera */
   .scrollbar-hidden::-webkit-scrollbar {
     display: none;
   }
 
-  /* Hide scrollbar for IE, Edge */
   .scrollbar-hidden {
     -ms-overflow-style: none;
   }
 
-  /* Hide scrollbar for Firefox */
   .scrollbar-hidden {
     scrollbar-width: none;
   }
@@ -32,5 +29,30 @@
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  transition: background-color 0.5s, color 0.5s;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+@keyframes circle-expand {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+
+  80% {
+    width: 200vw;
+    height: 200vw;
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0.5;
+  }
+
+  100% {
+    width: 200vw;
+    height: 200vw;
+    opacity: 0.1;
+  }
 }
