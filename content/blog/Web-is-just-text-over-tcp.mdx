@@ -1,0 +1,202 @@
+---
+title: "The web is just text over TCP"
+date: "2025-08-29"
+description: "Ever wondered what really happens when you type a URL into your browser and hit enter? In this post, I break down the basics of how the web works using plain HTTP over TCP. "
+tags: ["Web", "Basics"]
+image: "https://www.engineersgarage.com/wp-content/uploads/2019/07/Representational-Image-TCP-IP-Protocol.jpg"
+---
+
+# How the web works?
+
+when you type `instagram.com`, `cutehamster.com` or any other website's url on your browser and hit enter, some ui just magically appears on your browser, but the question is what is that magic,
+a vague answer can be - *browser sends a request, and the server sends a response*, yes that's what actually happens. 
+
+thank you for reading this blog. ummm no, lets dive into how this request travels from your browser in what form and how the server knows exactly what it has to serve.
+
+
+At its core, the web runs on a simple idea: *plain text messages being sent over a TCP connection*. everything else - all frameworks, `REST` api(s), cookies, TLS are just wrapper of this core idea.
+
+
+## TCP (Transmission Control Protocol)
+
+before talking about `HTTP`, let's take a step back and take a look on the transport layer of the internet - the `transmission control protocol` (TCP).
+
+when two computers talk over the internet, they use a protocol called tcp.
+
+before sending the data, TCP sets up a connection. Once connected, the client and server can send data back and forth like talking through a pipe.
+
+Unlike raw IP packets (which might get lost), TCP gurantees that the message on one side will be recieved as it is on the other side.
+
+# Journey of the URL
+
+when you open `vinm.me` in your browser, several things happen under the hood before the data is populated in your browser -
+
+## 1. DNS lookup: 
+
+The browser turns the domain name which is `vinm.me` in this case to an IP address something like `51.79.173.35`
+
+the browser first looks for local DNS cache to see if the IP is already known, if found it skips the rest of the process
+
+if not cached, the browser asks the operatin system (that's how localhost is mapped to 127.0.0.1), which then queries a DNS resolved, which is generally provided by your ISP or you can also use a public DNS service such as google public dns, cloudflare-dns etc.
+
+then its dns resolver's job to provide the ip for the particular domain.
+
+## 2. TCP handshake:
+
+once the browser knows the ip it needs to establish connection with, it (tries) to open a TCP connection on port 80 (for HTTP, port 80 is default) or port 443 for HTTPS.
+
+## 3. HTTP request:
+
+once the TCP handshake is done and your browser has successfully made a TCP connection to the server, it sends a HTTP request which is nothing but plain text in a certain manner which is globally recognised by every HTTP server 
+
+something like: `GET / HTTP/1.1`
+
+here the `GET` tells that this is a GET request and the `HTTP/1.1` tells the HTTP version the client is using.
+
+![HTTP request](https://codingnomads.com/images/afe3a1ed-36ca-4340-dcd5-4882aa364c00/public)
+
+## 4. HTTP response:
+
+the server gets the HTTP request text and decodes it, after that the server sends a respective response, it can be an HTML page, some json object, image etc.
+
+an http response looks something like:
+
+![HTTP response](https://media.geeksforgeeks.org/wp-content/uploads/20210905094321/StructureOfAHTTPResponse-660x374.png)
+
+## 5. Rendering:
+
+the browser recieves the HTML and displays it.
+
+---
+
+ok enough talks lets build a TCP server and see how a typical HTTP request looks like
+
+# TCP server
+
+i am using rust here, you can use any language of your choice (no javascript obv).
+
+```rust
+use std::io::{Read, Write};
+use std::net::TcpListener;
+
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:8000").unwrap();
+    println!("Listening on http:// {}", listener.local_addr().unwrap());
+
+    for stream in listener.incoming() {
+        let mut stream = stream.unwrap();
+        let mut buffer = [0; 1024];
+        stream.read(&mut buffer).unwrap();
+        println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+        let response = "HTTP/1.1 400 LOL\r\n\r\n{'Hello': 'world!'}";
+        stream.write_all(response.as_bytes()).unwrap();
+    }
+}
+```
+
+- Binding -> `TcpListener::bind("127.0.0.1:8000").unwrap()`, tells our program to listen to TCP connections on port 8000 on the local machine (ignore the .unwrap() its a rust specific thing).
+
+- Accepting connections -> `listener.incoming()` gives us a stream of new TCP connections, each time a client connects, we get a TcpStream.
+
+- Reading from the stream -> We allocate a buffer (array of 1024 bytes in this case) and read the incoming data into it.
+
+- Returning the response -> `stream.write_all(response.as_bytes()).unwrap()` sends the response which is a string to the client.
+
+
+
+now let's start the server and go to the localhost:8000 in our browser.
+
+![Tcp server](/blog/tcpServer.png)
+
+the server is running and listening to connections on http://127.0.0.1:8000
+
+![Response](/blog/tcpServerResponse.png)
+
+viola it is working as it is supposed to.
+
+but what's the request out brwoser sent to the server.
+
+```bash
+Request: GET / HTTP/1.1
+Host: localhost:8000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: none
+Sec-Fetch-User: ?1
+Priority: u=0, i
+
+
+Request: GET /favicon.ico HTTP/1.1
+Host: localhost:8000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0
+Accept: image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br, zstd
+Connection: keep-alive
+Referer: http://localhost:8000/
+Sec-Fetch-Dest: image
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Site: same-origin
+Priority: u=6
+```
+
+this is the actual request data that our server recieved, notice that we got a `GET` request twice, once for the `/` which is the actual document to be returned for `localhost:8000` and another for `/favicon.ico` which is the little icon we see on the tab.
+
+the request headers conatins all the information the server might need, such as: 
+
+- `Accept`: which tells the server what type of document the browser accepts, in this case we got `text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8`
+
+- `Accept-encoding`: the compression algorithms (ig) my browser supports.
+
+- `User-Agent`: tells the server which browser ans operating system i am using. (mozilla firefox in this case)
+
+ok now lets return a very basic html document to the browser
+
+```rust
+use std::io::{Read, Write};
+use std::net::TcpListener;
+
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:8000").unwrap();
+    println!("Listening on http:// {}", listener.local_addr().unwrap());
+    for stream in listener.incoming() {
+        let mut stream = stream.unwrap();
+        let mut buffer = [0; 1024];
+        stream.read(&mut buffer).unwrap();
+        println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+        let response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n\
+                        <html>\
+                        <head><title>Hello</title></head>\
+                        <body><h1>Hello, World!</h1></body>\
+                        </html>";
+        stream.write_all(response.as_bytes()).unwrap();
+    }
+}
+```
+
+![html response](/blog/htmlResponse.png)
+
+
+# Conclusion
+
+at first look, the web seems like an enormous, complex system. But its just some plain text data going back and forth from client to server.
+
+every framework, http server are a wrapper of this TCP server, you can try to make one yourself in the language of your choice (not in js ofc)
+
+the server just reads the text provided by the browser and acts accordingly.
+
+<BlogFooter />
+
+
+
+
+
+
+
+
