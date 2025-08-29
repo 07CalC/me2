@@ -3,18 +3,18 @@ title: "The web is just text over TCP"
 date: "2025-08-29"
 description: "Ever wondered what really happens when you type a URL into your browser and hit enter? In this post, I break down the basics of how the web works using plain HTTP over TCP. "
 tags: ["Web", "Basics"]
-image: "https://www.engineersgarage.com/wp-content/uploads/2019/07/Representational-Image-TCP-IP-Protocol.jpg"
+image: "https://media.geeksforgeeks.org/wp-content/uploads/20240226095336/TCP-Gif.gif"
 ---
 
 # How the web works?
 
 when you type `instagram.com`, `cutehamster.com` or any other website's url on your browser and hit enter, some ui just magically appears on your browser, but the question is what is that magic,
-a vague answer can be - *browser sends a request, and the server sends a response*, yes that's what actually happens. 
+a vague answer can be - browser sends a request, and the server sends a response, yes that's what actually happens. 
 
 thank you for reading this blog. ummm no, lets dive into how this request travels from your browser in what form and how the server knows exactly what it has to serve.
 
 
-At its core, the web runs on a simple idea: *plain text messages being sent over a TCP connection*. everything else - all frameworks, `REST` api(s), cookies, TLS are just wrapper of this core idea.
+At its core, the web runs on a simple idea: plain text messages being sent over a TCP connection. everything else - all frameworks, `REST` api(s), cookies, TLS are just wrapper of this core idea.
 
 
 ## TCP (Transmission Control Protocol)
@@ -67,7 +67,6 @@ an http response looks something like:
 
 the browser recieves the HTML and displays it.
 
----
 
 ok enough talks lets build a TCP server and see how a typical HTTP request looks like
 
@@ -94,13 +93,25 @@ fn main() {
 }
 ```
 
-- Binding -> `TcpListener::bind("127.0.0.1:8000").unwrap()`, tells our program to listen to TCP connections on port 8000 on the local machine (ignore the .unwrap() its a rust specific thing).
+- Binding -> 
+```rust
+TcpListener::bind("127.0.0.1:8000").unwrap()
+```
+, tells our program to listen to TCP connections on port 8000 on the local machine (ignore the .unwrap() its a rust specific thing).
 
-- Accepting connections -> `listener.incoming()` gives us a stream of new TCP connections, each time a client connects, we get a TcpStream.
+- Accepting connections -> 
+```rust
+listener.incoming()
+```
+gives us a stream of new TCP connections, each time a client connects, we get a TcpStream.
 
 - Reading from the stream -> We allocate a buffer (array of 1024 bytes in this case) and read the incoming data into it.
 
-- Returning the response -> `stream.write_all(response.as_bytes()).unwrap()` sends the response which is a string to the client.
+- Returning the response -> 
+```rust
+stream.write_all(response.as_bytes()).unwrap()
+```
+sends the response which is a string to the client.
 
 
 
@@ -150,7 +161,10 @@ this is the actual request data that our server recieved, notice that we got a `
 
 the request headers conatins all the information the server might need, such as: 
 
-- `Accept`: which tells the server what type of document the browser accepts, in this case we got `text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8`
+- `Accept`: which tells the server what type of document the browser accepts, in this case we got 
+```bash
+text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+```
 
 - `Accept-encoding`: the compression algorithms (ig) my browser supports.
 
@@ -192,11 +206,3 @@ every framework, http server are a wrapper of this TCP server, you can try to ma
 the server just reads the text provided by the browser and acts accordingly.
 
 <BlogFooter />
-
-
-
-
-
-
-
-
