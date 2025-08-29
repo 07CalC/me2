@@ -3,6 +3,7 @@ import { redis } from "./redis";
 import { resend } from "./resend"
 const LAST_SENT_BLOG_KEY = "newsletter:lastSent";
 const SUBSCRIBERS_SET = "newsletter:emails";
+const BATCH_SIZE = 2;
 
 export async function sendNewsLetterIfNewBlog() {
   const lastSend = await redis.get(LAST_SENT_BLOG_KEY);
@@ -19,29 +20,33 @@ export async function sendNewsLetterIfNewBlog() {
   if (subscribers.length === 0) {
     return;
   }
-
-  await Promise.allSettled(subscribers.map((email) => {
-    const response = resend.emails.send({
-      from: "Vinayak <newsletter@vinm.me>",
-      to: email,
-      subject: `New Blog Post: ${latestPost.meta.title} - Vinayak`,
-      html: `
+  for (let i = 0; i < subscribers.length; i += BATCH_SIZE) {
+    const batch = subscribers.slice(i, i + BATCH_SIZE);
+    await Promise.allSettled(batch.map((email) => {
+      const response = resend.emails.send({
+        from: "Vinayak <newsletter@vinm.me>",
+        to: email,
+        subject: `New Blog Post: ${latestPost.meta.title} - Vinayak`,
+        html: `
           <img src=${latestPost.meta.image} alt="${latestPost.meta.title}" style="width: 100%; height: auto; border-radius: 8px;" />
           <h1>${latestPost.meta.title}</h1>
           <p>${latestPost.meta.description}</p>
           <p>Read more at: <a href="https://vinm.me/blog/${latestPost.slug}">https://vinm.me/blog/${latestPost.slug}</a></p>
           <p><a href="https://vinm.me/unsubscribe?email=${encodeURIComponent(email)}">Unsubscribe</a> if you no longer wish to receive these emails.</p>
         `,
-      text: `
+        text: `
           New Blog Post: ${latestPost.meta.title} - Vinayak
           ${latestPost.meta.description}
           Read more at: https://vinm.me/blog/${latestPost.slug}
           Unsubscribe if you no longer wish to receive these emails: https://vinm.me/unsubscribe?email=${encodeURIComponent(email)}
   `,
-      replyTo: "Vinayak <newsletter@vinm.me>",
-    })
-    response.then(res => console.log(res.data!.id)).catch(err => console.error("Error sending email:", err));
-  }))
+        replyTo: "Vinayak <newsletter@vinm.me>",
+      })
+      response.then(res => console.log(res.data!.id)).catch(err => console.error("Error sending email:", err));
+    }))
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+  }
+
   console.log(`Sent newsletter for new blog post: ${latestPost.slug}`);
   await redis.set(LAST_SENT_BLOG_KEY, latestPost.slug);
 }
