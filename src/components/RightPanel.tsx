@@ -25,8 +25,9 @@ export default function RightPanel() {
       </div>
       <About />
       <Experience />
-      <Projects />
       <Blogs />
+
+      <Projects />
 
       <Suspense fallback={<div className="grid grid-cols-53 gap-1">
         {Array.from({ length: 7 * 53 }).map((_, i) => (
