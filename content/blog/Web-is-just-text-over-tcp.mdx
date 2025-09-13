@@ -25,7 +25,7 @@ when two computers talk over the internet, they use a protocol called tcp.
 
 before sending the data, TCP sets up a connection. Once connected, the client and server can send data back and forth like talking through a pipe.
 
-Unlike raw IP packets (which might get lost), TCP gurantees that the message on one side will be recieved as it is on the other side.
+Unlike raw IP packets (which might get lost), TCP guarantees that the message on one side will be received as it is on the other side.
 
 # Journey of the URL
 
@@ -37,7 +37,7 @@ The browser turns the domain name which is `vinm.me` in this case to an IP addre
 
 the browser first looks for local DNS cache to see if the IP is already known, if found it skips the rest of the process
 
-if not cached, the browser asks the operatin system (that's how localhost is mapped to 127.0.0.1), which then queries a DNS resolved, which is generally provided by your ISP or you can also use a public DNS service such as google public dns, cloudflare-dns etc.
+if not cached, the browser asks the operating system (that's how localhost is mapped to 127.0.0.1), which then queries a DNS resolved, which is generally provided by your ISP or you can also use a public DNS service such as google public dns, cloudflare-dns etc.
 
 then its dns resolver's job to provide the ip for the particular domain.
 
@@ -123,9 +123,9 @@ the server is running and listening to connections on http://127.0.0.1:8000
 
 ![Response](/blog/tcpServerResponse.png)
 
-viola it is working as it is supposed to.
+voila it is working as it is supposed to.
 
-but what's the request out brwoser sent to the server.
+but what's the request out browser sent to the server.
 
 ```bash
 Request: GET / HTTP/1.1
@@ -157,9 +157,9 @@ Sec-Fetch-Site: same-origin
 Priority: u=6
 ```
 
-this is the actual request data that our server recieved, notice that we got a `GET` request twice, once for the `/` which is the actual document to be returned for `localhost:8000` and another for `/favicon.ico` which is the little icon we see on the tab.
+this is the actual request data that our server received, notice that we got a `GET` request twice, once for the `/` which is the actual document to be returned for `localhost:8000` and another for `/favicon.ico` which is the little icon we see on the tab.
 
-the request headers conatins all the information the server might need, such as: 
+the request headers contains all the information the server might need, such as: 
 
 - `Accept`: which tells the server what type of document the browser accepts, in this case we got 
 ```bash
