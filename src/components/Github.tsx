@@ -25,7 +25,7 @@ export async function getGitHubStats() {
         "Authorization": `Bearer ${token}`,
       }
     }),
-    fetch(`https://api.github.com/users/${username}/events/public`, {
+    fetch(`https://api.github.com/users/${username}/events`, {
       headers: {
         "Authorization": `Bearer ${token}`,
       }

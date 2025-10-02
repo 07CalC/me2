@@ -4,7 +4,7 @@ const websites: { name: string; url: string }[] = [
   { name: "vinm.me", url: "https://vinm.me" },
   { name: "crux.hs.vc", url: "https://crux.hs.vc" },
   { name: "batua.site", url: "https://batua.site" },
-  { name: "jeelore.site", url: "https://jeelore.site" },
+  { name: "jeelore.vinm.me", url: "https://jeelore.vinm.me" },
 ];
 
 type SiteStatus = { name: string; status: "UP" | "DOWN" };
@@ -47,7 +47,7 @@ export default async function Websites() {
           >
             {site.name}:{" "}
             <span className={site.status === "UP" ? "text-green-500" : "text-red-500"}>
-              {site.status}
+              [ {site.status} ]
             </span>
           </Link>
         ))}
