@@ -5,7 +5,6 @@ import Spotify from "./Spotify";
 import { Suspense } from "react";
 import { FaLocationArrow } from "react-icons/fa6";
 import Github from "./Github";
-import Websites from "./Websites";
 import TotalViews from "./TotalViews";
 
 
@@ -64,19 +63,6 @@ export default function LeftPanel() {
         </div>
       }>
         <Spotify />
-      </Suspense>
-      <Suspense fallback={<div className="flex flex-col items-start justify-center animate-pulse">
-        <div className="font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
-          Websites
-        </div>
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="flex items-center space-x-4 mb-2">
-            <div className="w-32 h-6 bg-gray-700 rounded" />
-            <div className="w-12 h-6 bg-gray-800 rounded" />
-          </div>
-        ))}
-      </div>}>
-        <Websites />
       </Suspense>
 
     </div>

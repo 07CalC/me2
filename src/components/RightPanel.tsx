@@ -6,7 +6,6 @@ import Projects from "./Projects";
 import Blogs from "./Blogs";
 import Github from "./Github";
 import Spotify from "./Spotify";
-import Websites from "./Websites";
 import TotalViews from "./TotalViews";
 import { People } from "./People";
 
@@ -54,21 +53,6 @@ export default function RightPanel() {
       }>
         <div className="sm:hidden">
           <Spotify />
-        </div>
-      </Suspense>
-      <Suspense fallback={<div className="flex sm:hidden flex-col items-start justify-center animate-pulse">
-        <div className="font-extrabold text-2xl mb-2 flex items-center w-full justify-between">
-          Websites
-        </div>
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="flex items-center space-x-4 mb-2">
-            <div className="w-32 h-6 bg-gray-700 rounded" />
-            <div className="w-12 h-6 bg-gray-800 rounded" />
-          </div>
-        ))}
-      </div>}>
-        <div className="sm:hidden">
-          <Websites />
         </div>
       </Suspense>
       <div>

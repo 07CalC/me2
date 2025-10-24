@@ -51,30 +51,17 @@ const projects = [
   },
 
   {
-    title: "Dorara",
-    description: `An all-in-one productivity app that combines to-do lists, notes, and journaling to help users stay organized and track their
-  daily activities.`,
-    image: "/dorara.png",
+    title: "Fyrer",
+    description: `lightweight tool to run multiple dev servers concurrently `,
+    image: "/fyrer.png",
     tech: [
       {
-        name: "React Native",
-        icon: "/react.svg",
-      },
-      {
-        name: "Expo",
-        icon: "/expo.svg",
-      },
-      {
-        name: "Sqlite",
-        icon: "/sqlite.svg",
-      },
-      {
-        name: "Nativewind CSS",
-        icon: "/tailwind.svg",
-      },
+        name: "Rust",
+        icon: "/rust.svg"
+      }
     ],
-    github: "https://github.com/07Calc/dorara",
-    demo: "https://github.com/07CalC/Dorara/releases/tag/v1.2"
+    github: "https://github.com/07Calc/fyrer",
+    demo: "https://crates.io/crates/fyrer",
   },
 ]
 

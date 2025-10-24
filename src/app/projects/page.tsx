@@ -88,6 +88,20 @@ const projects = [
     demo: "https://github.com/07CalC/Dorara/releases/tag/v1.2"
   },
   {
+    title: "Fyrer",
+    description: `lightweight tool to run multiple dev servers concurrently `,
+    image: "/fyrer.png",
+    tech: [
+      {
+        name: "Rust",
+        icon: "/rust.svg"
+      }
+    ],
+    demo: "https://crates.io/crates/fyrer",
+    github: "https://github.com/07Calc/fyrer",
+  },
+
+  {
     title: "LaxCI",
     description: `LaxCI is a blazing-fast, minimal CI runner written in Rust that executes workflows defined in a laxci.yml file — just like GitHub Actions, but entirely local.`,
     image: "/laxci.png",
