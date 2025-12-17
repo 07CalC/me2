@@ -5,9 +5,9 @@ const experienceData = [
     company: "resumemate.io",
     position: "Frontend Developer Intern",
     url: "https://resumemate.io",
-    duration: "August'25 - Present",
+    duration: "August'25 - October'25",
     logo: "/resumemateLogo.svg",
-    description: `Developing and maintaining the front-end of a resume-building web application using Next.js, ensuring a responsive and user-friendly interface.`,
+    description: `Developed and maintained the front-end of a resume-building web application using Next.js, ensuring a responsive and user-friendly interface.`,
     techStack: ["Next.js", "TypeScript", "Tailwind CSS"]
   },
   {
