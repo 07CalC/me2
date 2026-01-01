@@ -1,0 +1,478 @@
+---
+title: "Mist: A self-hostable PAAS that doesn't suck (mostly)"
+date: "2026-01-01"
+description: "A self-hostable PAAS using Go, SQLite, and Docker. Here's what makes it good - and where it falls short."
+tags: ["Go", "Docker", "DevOps", "PAAS"]
+image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1200"
+---
+
+> Note: this document is enhanced using AI, if you have any issues, suck a fat one 
+
+# Why another PAAS?
+
+if you've ever deployed a side project, you know the pain. Heroku killed their free tier. Vercel is great but locks you in. AWS is... AWS.
+
+meanwhile, you have a VPS sitting there doing nothing. why not use it?
+
+that's where self-hostable PAAS platforms come in. Coolify, Dokploy, CapRover - they all try to give you that Heroku-like experience on your own server.
+
+but here's the thing - most of them are built with Node.js and require PostgreSQL or MongoDB. that's a lot of moving parts for something that should be simple.
+
+so we built [Mist](https://trymist.cloud) - a PAAS that runs as a single Go binary with SQLite. no external dependencies, no bullshit.
+
+# What is Mist?
+
+mist is a platform that lets you deploy web apps from git repositories using Docker. think Heroku but running on your own server.
+
+you connect your GitHub repo, mist builds it with Docker, and deploys it with automatic SSL and custom domains. all through a clean web interface.
+
+the whole thing is ~20MB and uses about 30-50MB of RAM when idle. compare that to Node.js alternatives that easily eat 500MB+.
+
+## Tech stack
+
+here's what we used:
+
+- Golang (the binary compiles to ~20MB)
+- SQLite (no separate database server needed)
+- Docker for container management
+- Traefik for reverse proxy and SSL
+- React and Vue (somewhat)
+- Vite as build tool
+- systemd for process management
+- One-line install script with automatic rollback
+
+the entire codebase is about 13k lines of Go and 143 TypeScript files. not huge, but not trivial either.
+
+# The architecture
+
+## How deployments work
+
+here's what happens when you push code:
+
+1. **GitHub webhook hits mist** → creates a deployment record
+2. **Deployment goes into queue** → in-memory channel in Go
+3. **Worker picks up job** → single goroutine processes jobs sequentially
+4. **Clone repo** → git clone into temp directory
+5. **Build with Docker** → docker build with env vars as build args
+6. **Stop old container** → graceful shutdown of previous version
+7. **Start new container** → docker run with resource limits
+8. **Update Traefik config** → automatic routing updates
+9. **Cleanup** → delete old images (keeps last 5)
+
+the whole process is real-time. you watch logs stream in through WebSockets as your app builds and deploys.
+
+## Database design
+
+we went with SQLite because it's simple. the entire database is a single file at `/var/lib/mist/mist.db`.
+
+29 tables covering:
+- users, sessions, API tokens
+- projects and team members
+- apps, deployments, domains, env vars
+- GitHub app integration
+- audit logs and system settings
+
+migrations run automatically on startup. no separate migration tool needed.
+
+## WebSocket-first approach
+
+most PAAS platforms poll for status updates. fuck that.
+
+mist uses WebSockets for everything real-time:
+- Live build logs as Docker builds your app
+- Deployment status updates
+- System metrics (CPU, RAM, disk)
+- Container logs from running apps
+
+the metrics broadcaster is smart - it only collects data when clients are connected:
+
+no wasted CPU cycles.
+
+## Docker integration
+
+mist talks directly to Docker via `/var/run/docker.sock`.
+
+containers get:
+- CPU limits (configurable, e.g., 1.0 cores)
+- Memory limits (configurable, e.g., 512MB)
+- Restart policies (always, on-failure, unless-stopped, no)
+- Custom env variables (unlimited)
+- Persistent volumes (host path mappings)
+- Automatic network configuration (traefik-net bridge)
+
+Traefik handles all the routing. each app gets Docker labels like:
+
+```bash
+traefik.enable=true
+traefik.http.routers.app-123.rule=Host(`myapp.example.com`)
+traefik.http.services.app-123.loadbalancer.server.port=3000
+```
+
+Traefik watches for container changes and updates routes automatically. no nginx config files to edit.
+
+# The good parts
+
+let me start with what actually works well.
+
+## 1. Resource efficiency
+
+this thing is fucking lightweight.
+
+- Single 20MB binary
+- 30-50MB RAM idle
+- SQLite database
+- No Redis, no PostgreSQL, no external services
+
+you can run mist on the cheapest VPS ($5/month) and still have room for your apps.
+
+compare this to Coolify which needs Node.js + PostgreSQL + Redis, easily 500MB+ before you deploy anything.
+
+## 2. Installation is dead simple
+
+one command:
+
+```bash
+curl -sSL https://trymist.cloud/install.sh | bash
+```
+
+the script:
+- Detects your package manager (apt, dnf, yum, pacman)
+- Installs Go if needed
+- Clones and builds mist
+- Sets up systemd service
+- Installs Traefik
+- Runs health checks
+- Logs everything to `/tmp/mist-install.log`
+- Rolls back automatically if anything fails
+
+five minutes later you're deploying apps.
+
+## 3. Real-time everything
+
+watching your app build in real-time is addictive. no refresh button needed.
+
+the moment you push to GitHub:
+1. Webhook fires
+2. Deployment appears in UI
+3. Build logs stream live
+4. Deploy completes
+5. Metrics start flowing
+
+all in the same browser tab.
+
+## 4. Developer experience
+
+the UI is clean. no cluttered dashboards with 50 menu items.
+
+Projects → Apps → Deployments → Logs. that's it.
+
+creating an app:
+1. Connect GitHub repo
+2. Set branch and Dockerfile path
+3. Add env vars if needed
+4. Deploy
+
+done.
+
+## 5. GitHub integration
+
+mist makes you create a GitHub App you can install. it handles:
+- OAuth login
+- Repository access
+- Webhook setup
+- Signature verification
+
+you don't manually copy webhook URLs or set up deploy keys. it just works.
+
+## 6. Database service templates
+
+mist comes with pre-configured templates for common databases and services:
+
+- PostgreSQL 16
+- MySQL 8 / MariaDB 11
+- MongoDB 7
+- Redis 7
+- RabbitMQ 3
+- MinIO (S3-compatible storage)
+
+create a "database" type app, pick a template, and mist pulls the official Docker image with sensible defaults. volumes get mounted automatically, passwords get generated (though unencrypted - see bad parts).
+
+it's not managed hosting - no automated backups or fancy monitoring. but it gets a database running in 30 seconds.
+
+## 7. Project-based organization
+
+apps are organized into projects. each project can have multiple team members.
+
+perfect for agencies or teams managing multiple client sites.
+
+## 8. Audit logging
+
+every action gets logged:
+- User logins
+- Deployments
+- Settings changes
+- Team member additions
+
+compliance nerds will appreciate this.
+
+# The bad parts
+
+now let's talk about where mist falls short. because it definitely does.
+
+## 1. Single server only
+
+mist can't scale horizontally. it's one server, one process, one database.
+
+if your server dies, everything is down. no failover, no redundancy.
+
+for personal projects or small teams, this is fine. for anything serious, it's a dealbreaker.
+
+the roadmap has multi-node support, but that's a massive undertaking. SQLite doesn't replicate. the whole architecture would need a rewrite.
+
+## 2. In-memory deployment queue
+
+deployments go into a Go channel. that's in-memory.
+
+if mist crashes during a deployment, that job is gone. you have to manually redeploy.
+
+in production, this should be a persistent queue (BoltDB, BadgerDB, or even SQLite). but we haven't done that yet.
+
+also, single worker goroutine means deployments are sequential. if one build takes 10 minutes, everything else waits.
+
+## 3. No rollback
+
+once deployed, you can't roll back to a previous version through the UI.
+
+you'd have to:
+1. Git revert your changes
+2. Push again
+3. Wait for rebuild
+
+this is basic functionality that should exist. it's on the roadmap, but yeah, not there yet.
+
+## 4. Basic database provisioning
+
+mist has service templates for common databases - PostgreSQL, MySQL, MariaDB, MongoDB, Redis, RabbitMQ, and MinIO.
+
+you can spin these up as "database" type apps. they pull official Docker images and handle the basics like volume mounting and env vars.
+
+but there's no managed backups, no automated updates, no health monitoring dashboards. you get the container running - everything else is on you.
+
+Coolify and Dokploy both have this. it's a glaring omission.
+
+## 5. No build cache
+
+every deployment builds from scratch. no Docker layer caching, no dependency caching.
+
+deploying a Next.js app? enjoy waiting 5 minutes for `npm install` every single time.
+
+this is solvable - Docker supports build caching. i just haven't wired it up properly yet.
+
+## 6. Environment variables not encrypted
+
+env vars are stored in plaintext in SQLite.
+
+yes, you read that right. your database passwords, API keys, all sitting there unencrypted.
+
+if someone gets access to `/var/lib/mist/mist.db`, they get all your secrets.
+
+this is fucking terrible and i know it. encryption at rest is coming, but it should've been there from day one.
+
+## 7. SQLite limitations
+
+SQLite is great for single-server apps. but it has limits:
+
+- Concurrent writes are serialized
+- No network access (must be local file)
+- Scaling beyond 1000s of concurrent users gets dicey
+
+for 99% of use cases, this is fine. but if mist ever gets popular, SQLite becomes the bottleneck.
+
+## 8. No health checks
+
+mist starts your container and hopes for the best.
+
+if your app crashes immediately after starting, mist doesn't know. the deployment shows as "successful" even though your app is dead.
+
+proper health checks (HTTP probes, TCP checks) should be built in. they're not.
+
+## 9. Basic metrics
+
+the metrics dashboard shows:
+- System CPU
+- System RAM
+- Disk usage
+
+it does NOT show per-container metrics. you can't see how much CPU your specific app is using.
+
+this requires integrating with Docker's stats API, which i haven't done.
+
+## 10. No PR previews
+
+GitHub PR preview environments would be killer.
+
+open a PR → mist deploys it to a temporary subdomain → review → merge → preview is deleted.
+
+Vercel does this perfectly. mist doesn't do it at all.
+
+# Compared to alternatives
+
+how does mist stack up against other self-hosted options?
+
+## vs Coolify
+
+**Coolify pros:**
+- More mature (been around longer)
+- Database provisioning built-in
+- Better docs and community
+
+**Mist pros:**
+- Way lighter (Go vs Node.js)
+- Single binary vs multiple services
+- Faster response times
+
+## vs Dokploy
+
+**Dokploy pros:**
+- More features out of the box
+- Better UI (subjective)
+- Active development
+
+**Mist pros:**
+- SQLite vs PostgreSQL dependency
+- Simpler architecture
+- Lower resource usage
+
+## vs CapRover
+
+**CapRover pros:**
+- Battle-tested (oldest of the bunch)
+- App templates and one-click apps
+- Bigger community
+
+**Mist pros:**
+- Modern stack (Go vs Node.js)
+- WebSocket-first design
+- Cleaner UI (again, subjective)
+
+## vs Dokku
+
+**Dokku pros:**
+- Rock solid (used in production everywhere)
+- Heroku buildpack support
+- Massive community
+
+**Mist pros:**
+- Web UI (Dokku is CLI-only)
+- Real-time logs and metrics
+- Easier for non-technical users
+
+honestly? if you want production-ready right now, use **Dokku** or **CapRover**. they're proven.
+
+mist is for people who:
+- Want bleeding-edge tech (Go, React 19, Traefik v3)
+- Value resource efficiency
+- Don't mind rough edges
+- Enjoy tinkering
+
+# Performance numbers
+
+ran some benchmarks on a 2-core, 4GB RAM VPS:
+
+**API response times:**
+- List apps: ~15ms
+- Deploy app: ~2s (queue time)
+- Get logs: ~8ms (WebSocket connect)
+
+**Build times (varies by project):**
+- Simple Node.js app: ~2 min
+- Next.js app: ~5 min (no cache, remember?)
+- Go binary: ~30 sec
+
+> Note: these resource are used by mist only, and doesn't include the cpu/ram usage by docker or your app's build process
+
+**Resource usage:**
+- Mist idle: ~30MB RAM, 0.1% CPU
+- During build: ~50MB RAM, 1-2% CPU
+- 5 running apps: ~30MB RAM total, 0.1% CPU
+
+pretty efficient.
+
+# Should you use it?
+
+**Use mist if:**
+- You're deploying side projects or hobby apps
+- You have a VPS doing nothing
+- You want Heroku-like DX without vendor lock-in
+- You're okay with rough edges
+- Resource efficiency matters to you
+
+**Don't use mist if:**
+- You need high availability
+- You're deploying production apps for clients (yet)
+- You need managed database backups and monitoring
+- You can't tolerate missing features
+- You want battle-tested software
+
+mist is **pre-1.0**. it works, but it's not production-ready for serious workloads.
+
+# What's next?
+
+roadmap for mist:
+
+**Short term:**
+- Encrypt env vars at rest
+- Per-container metrics
+- Build cache support
+- Health checks
+- Rollback functionality
+
+**Medium term:**
+- Managed database backups and health monitoring
+- PR preview environments
+- Better logging (search, filter, retention)
+- Rate limiting and security hardening
+
+**Long term:**
+- Multi-node support
+- Kubernetes backend (maybe?)
+- Plugin system
+- Marketplace for templates
+
+# Try it
+
+mist is MIT licensed and available on GitHub.
+
+install:
+```bash
+curl -sSL https://trymist.cloud/install.sh | bash
+```
+
+or check the source:
+```bash
+git clone https://github.com/corecollectives/mist
+cd mist
+fyrer # hot-reload dev server
+```
+
+the code is clean, well-commented, and designed to be hackable. fork it, break it, improve it.
+
+# Contributors welcome
+
+if you want to contribute to mist, you're very welcome. whether it's fixing bugs, adding features, improving docs, or just reporting issues - every contribution helps.
+
+check out the [GitHub repo](https://github.com/corecollectives/mist), read the roadmap, and pick something that interests you. the codebase is pretty straightforward and we're happy to help new contributors get started.
+
+# Final thoughts
+
+mist isn't perfect. it's missing features, has bugs, and needs work.
+
+but everything missing will be coming soon. this is a fast-paced project and we're working hard to add everything required to make it great - while keeping it lightweight and user-friendly.
+
+rollback, build cache, better monitoring, encrypted secrets - all on the way. we're not slowing down.
+
+it works. it's fast. and it's better than paying $30/month to Heroku.
+
+if you build something with mist, let me know. i'd love to see it.
+
+<BlogFooter />
