@@ -88,10 +88,8 @@ export default async function Spotify() {
       },
       cache: "no-store",
     });
-
     let track: Track | null = null;
     let isPlaying = false;
-
     if (currentRes.status === 200) {
       const data: CurrentlyPlayingResponse = await currentRes.json();
       if (data?.item) {
@@ -99,7 +97,6 @@ export default async function Spotify() {
         isPlaying = data.is_playing;
       }
     }
-
     if (!track) {
       const recentRes = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=1", {
         headers: {
